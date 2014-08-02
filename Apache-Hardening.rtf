@@ -1,0 +1,191 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+{\fonttbl\f0\fnil\fcharset0 MyriadPro-Regular;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;\red114\green169\blue50;\red224\green224\blue224;
+}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid1\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}
+{\list\listtemplateid2\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid101\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid2}
+{\list\listtemplateid3\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid201\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid3}
+{\list\listtemplateid4\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid301\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid4}
+{\list\listtemplateid5\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid401\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid5}
+{\list\listtemplateid6\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid501\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid6}
+{\list\listtemplateid7\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid601\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid7}
+{\list\listtemplateid8\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid701\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid8}
+{\list\listtemplateid9\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid801\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid9}
+{\list\listtemplateid10\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{none\}}{\leveltext\leveltemplateid901\'00;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid10}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}{\listoverride\listid2\listoverridecount0\ls2}{\listoverride\listid3\listoverridecount0\ls3}{\listoverride\listid4\listoverridecount0\ls4}{\listoverride\listid5\listoverridecount0\ls5}{\listoverride\listid6\listoverridecount0\ls6}{\listoverride\listid7\listoverridecount0\ls7}{\listoverride\listid8\listoverridecount0\ls8}{\listoverride\listid9\listoverridecount0\ls9}{\listoverride\listid10\listoverridecount0\ls10}}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl480\sa300
+
+\f0\b\fs36 \cf2 Apache Security and Hardening
+\fs48 \
+
+\b0\fs28 \cf0 The Apache web server is a crucial part of the website infrastructure. It has a number of built in features that can improve your website resistance to attacks. The following document covers a number of steps that will help you to achieve this goal. This document is largely based on the knowledge gathered by our security team and by statistics information revealed by our {\field{\*\fldinst{HYPERLINK "http://www.kyplex.com/website-security-scanner.html"}}{\fldrslt \cf3 security scanner}}.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip No. 1: Disable Apache Signature and/or Apache Banner\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 Apache Signature or Apache Banner is basically the same thing. It is an application name together with version name that is printed when performing a web request. Nobody actually needs this information at all, but it is enabled by default. You need to alter the Apache configuration file to disable it.\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls1\ilvl0\cf0 		ServerSignature Off\
+		ServerTokens ProductOnly\
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 In Ubuntu, you need to change the following file: 
+\f1 /etc/apache2/apache2.conf
+\f0 \
+Double check that 
+\f1 ServerSignature
+\f0  and 
+\f1 ServerTokens
+\f0  configuration settings are not enabled in some other parts of the configuration file.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip No. 2: The Trace HTTP Request\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 HTTP TRACE request is used to echo back all received information. It can be tricked to print HTTP cookies and as a result steal HTTP session. Basically this request can be used as part of the Cross Site Scripting attack, or XSS. It is recommended to disable it as a security precaution.\
+Add the following to the web-server's configuration file. For example alter the following file in Ubuntu: 
+\f1 /etc/apache2/apache2.conf
+\f0  .\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls2\ilvl0\cf0 		TraceEnable off\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 3: Remove PHP scripts that print debug info using phpinfo()\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 The built-in PHP function 
+\f1 phpinfo()
+\f0  prints a lot of interesting internal information about the PHP environment. It can include list of which PHP modules are enabled, and the location of various files on the web-server and other sensitive information. Our web security scanner finds a lot of such files. It is recommended to remove these test files from a production website.\
+Here is a tip hpw to find such files. Look for the files with the following name: 
+\f1 test.php
+\f0 ,
+\f1 info.php
+\f0 , 
+\f1 i.php
+\f0  and 
+\f1 phpinfo.php
+\f0  in your website directory and remove them.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 4: Disable directory indexing\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 Directory indexing is a features found in every web-server by default. When directory indexing is enabled, the web-site prints a list of files found in the website directories when the default page does not exists (for example 
+\f1 index.php
+\f0 ). Directories reported can be viewed by any visitor. It is vulnerable in the sense that these directories can contain configuration, private and backup files which can be used by the attackers to take your server under control.\
+You can fix this problem by disabling the Apache 
+\f1 autoindex
+\f0  module. In some Apache installations it is called 
+\f1 mod_autoindex.so
+\f0 . In Ubuntu, you just need to remove the following files:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls3\ilvl0\cf0 		/etc/apache2/mods-enabled/autoindex.load\
+		/etc/apache2/mods-enabled/autoindex.conf\
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 So you can do it running the following commands:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls4\ilvl0\cf0 		rm -f /etc/apache2/mods-enabled/autoindex.load\
+		rm -f /etc/apache2/mods-enabled/autoindex.conf\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 5: Disable WebDAV\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 WebDAV is a file access protocol created over HTTP protocol. It allows you to upload and download files, and change file contents from the website. This service is required only in very rare cases. From our experience, this feature was only required to run SVN server (link). Make sure that WebDAV is disabled in production websites. When WebDAV is enabled, the following commands are supported by Apache: OPTIONS, PROPFIND, etc. These commands are sensitive from computer security point of view.\
+You can fix this problem by disabling Apache dav, dav_fs and dav_lock modules. In Ubuntu you just need to remove the following files:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls5\ilvl0\cf0 		/etc/apache2/mods-enabled/dav.load\
+		/etc/apache2/mods-enabled/dav_fs.conf\
+		/etc/apache2/mods-enabled/dav_fs.load\
+		/etc/apache2/mods-enabled/dav_lock.load\
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 So you can do it running the following commands:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls6\ilvl0\cf0 		rm -f /etc/apache2/mods-enabled/dav.load\
+		rm -f /etc/apache2/mods-enabled/dav_fs.conf\
+		rm -f /etc/apache2/mods-enabled/dav_fs.load\
+		rm -f /etc/apache2/mods-enabled/dav_lock.load\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 6: Create a chroot'ed Apache environment\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 Chroot is a kind of virtual environment supported operating systems such as Linux and FreeBSD. When an application is executed in chrooted environment it has no access to the parent disk and to other recources.\
+This is a good solution if you want to protect your website from malicious users. The action steps required to create chroot Apache was already covered in a number of websites. For example: http://www.linux.com/archive/feed/36331\
+The main hidden issue with chrooted environment is that this environment protects the websites from accessing the operating system's files. It does not protect one site from another. In other words, if a malicious script located in one site it can access files located on other site because they are located on the same chrooted environment.\
+A solution to this problem is the following. Create a number of apache instances, each one hosting one website running each one if different chrooted directory. These apache instances will not be able to share IP addresses. You will have to configure different IP for each Apache instance you run.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 7: Enable PHP basedir\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 PHP has built in a kind of chroot environment. It is called \'93basedir\'94. You can configure PHP scripts to access files only in specific directory similar to chroot. Basically you can configure each site to access only files located in that site directory which is a very good idea from the security point of view.\
+You can add the following lines to the website configuration file or to .htaccess file to enable PHP basedir:\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls7\ilvl0\cf0 		Php_value open_basedir /var/www/foo.bar/:/usr/local/php/\
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 This will specify that your PHP scripts can access only specified directories.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 8: Web Stats\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 Some webmasters install open source tools on their website that analyze web requests and create statistical reports. Access to these webstat scrips is almost never secured with a password. So any visitor can basically view such reports. For example some webmasters install in in the \ul /stats\ulnone  directory accessible by \ul http://www.my-site.com/stats\ulnone  .\
+Statistical reports contain a lot of sensitive information. For example it can contain hidden file names and directory names, full web requests, search engine keywords, etc... All this information can be used by the malicious users and/or your competitors.\
+Instead of running a statistics script on your website we recommend that you use Google Analytics. It is a free-of-charge and quality service.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 9: Use Google\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 Most of the webmasters use common web scripts and CMS or blog software. We recommend you to frequently search for security updates using Google and register for security news at your blog/CMS website.\
+\pard\pardeftab720\sl400
+
+\fs36 \cf2 Tip 10: Additional Steps\
+\pard\pardeftab720\sl440\sa400\qj
+
+\fs28 \cf0 If your webserver runs together with MySQL server it brings additional potential security problem. MySQL can read any files located on you server including the one located in different chrooted environments. It happens because of the FILE permission. By default only MySQL root has it. For more info about MySQL security take a look at this article ( link to GreenSQL) .\
+\pard\pardeftab720\sl400
+
+\b \cf0 Install a Database Firewall
+\b0 \
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 Download GreenSQL Express which is a free version of the GreenSQL database firewall.\
+\pard\pardeftab720\sl400
+
+\b \cf0 Install a Web Firewall
+\b0 \
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 Mod_security is a good open source product.\
+\pard\pardeftab720\sl400
+
+\b \cf0 Additional links
+\b0 \
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls8\ilvl0\cf0 		http://httpd.apache.org/docs/2.2/misc/security_tips.html\
+		http://shiflett.org/articles/the-truth-about-sessions\
+		http://www.hardened-php.net/suhosin/a_feature_list.html\
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 \'a0\
+\pard\pardeftab720\sl400\sa400
+\cf0 \cb4 \
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 \cb1 \
+\pard\pardeftab720\sl400
+\cf0 Kyplex Cloud Security offers the following services:\
+\pard\pardeftab720\sl440\sa400\qj
+\cf0 \
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls9\ilvl0\cf0 		Security Seal.\
+		Website Antivirus.\
+		Website Security Scanner.\
+		Manual malware cleanup service.\
+\pard\tx720\pardeftab720\sl400
+\cf0 \
+\
+\
+\pard\tx220\tx720\pardeftab720\li720\fi-720\sl400
+\ls10\ilvl0\cf0 		{\field{\*\fldinst{HYPERLINK "http://www.thefanclub.co.za/how-to/how-install-apache2-modsecurity-and-modevasive-ubuntu-1204-lts-server"}}{\fldrslt http://www.thefanclub.co.za/how-to/how-install-apache2-modsecurity-and-modevasive-ubuntu-1204-lts-server}}\
+}

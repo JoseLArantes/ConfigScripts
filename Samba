@@ -1,0 +1,15 @@
+[global]
+  log level = 1 # Default
+  socket options = TCP_NODELAY IPTOS_LOWDELAY
+  read raw = yes
+  write raw = yes
+  oplocks = yes
+  max xmit = 65535
+  dead time = 15
+  getwd cache = yes
+  lpq cache = 30
+[okplace]
+  veto oplock files = this/that/theotherfile
+[badplace]
+  oplocks = no
+

@@ -1,0 +1,105 @@
+#Cacti
+
+
+yum install snmp snmpd net-snmp-utils net-snmp-devel rrdtool mrtg
+
+# Configurar o SNMP
+
+#Adicionar usuário para a versão 3
+
+net-snmp-config --create-snmpv3-user -ro -a socialsobmedida -X AES -A SHA beblook
+
+#Edit /etc/snmp/snmpd.conf and change rouser USERNAME to rouser USERNAME priv, this forces encryption for all traffic.
+
+# Inicia o serviço e testa
+
+snmpwalk -v 3 -l authPriv -a sha -A socialsobmedida -x AES -X socialsobmedida -u beblook localhost
+
+#Inclua no final do arquivo /var/net-snmp/snmpd.conf 
+
+createUser USERNAME SHA "PASSWORD" AES
+rouser USERNAME priv
+
+#Testa
+
+snmpwalk -v 3 -l authPriv -a sha -A socialsobmedida -x AES -X socialsobmedida -u beblook localhost
+
+#Disabilita o SE  > setenforce 0, iniciar o snmpd e depois pode iniciar o se novamente  > setenforce 1
+
+#no arquivo snmpd.conf
+#alterar de:
+view    systemview    included   .1.3.6.1.2.1.1
+#para:
+view    systemview    included   .1.3.6.1.2.1
+
+
+#Mais testes
+
+#Esse comando
+
+snmpwalk -v 1 -c public localhost IP-MIB::ipAdEntIfIndex
+
+#Deve gerar um resultado do tipo:
+IP-MIB::ipAdEntIfIndex.10.8.215.214 = INTEGER: 2
+IP-MIB::ipAdEntIfIndex.127.0.0.1 = INTEGER: 1
+
+#Esse deve varrer a arvore de MIBs do SNMP, usando a versao 3
+snmpwalk -v 3 -l authPriv -a sha -A 12qwaszx -x AES -X 12qwaszx -u joseluiz localhost
+
+#Mais teste com versao 2
+
+snmpwalk -v 2c -c public 127.0.0.1 sysUpTimeInstance
+
+
+#Após isso tudo
+
+yum install cacti
+
+mysql -u root -p -e 'create database cacti'
+mysql -u root -p
+mysql> GRANT ALL ON cacti.* TO cacti@localhost IDENTIFIED BY 'zYn95ph43zYtq';
+mysql> FLUSH privileges;
+mysql> \q
+
+procure o arquivo .sql
+# rpm -ql cacti | grep cacti.sql
+#importa a base
+mysql -u cacti -p cacti < /var/www/cacti/cacti.sql
+#configura o cacti para utilizar a base de dados
+vi /etc/cacti/db.php
+
+
+#configura o mysql, cria a base de dados depois importa o arquivo .sql no diretorio do cacti para a database correta
+#configura o arquivo que conecta a base de dados 
+
+#Configura o apache 
+
+#adiciona o cacti.conf no conf.d do httpd apontando para o diretorio de instalacao
+
+#vai pelo navegador
+
+http://ip/cacti
+
+admin
+admin
+
+#Troca a senha
+
+#Prossegue com a instalação
+
+#Para adicionar um grafico de rede
+
+Devices
+Seleciona o Device
+No final da pagina em Associated Data Queries, adiciona a query relacionada a trafego de rede no combo Associated Data Queries e clicando no botão Add
+Clica em New Graphic
+Em Associated Data Queries tem um Checkbox, clica nele e em add
+Pronto!
+
+
+
+
+
+
+
+

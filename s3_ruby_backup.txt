@@ -1,0 +1,44 @@
+yum install ruby
+
+wget http://s3.amazonaws.com/ServEdge_pub/s3sync/s3sync.tar.gz
+tar xzf s3sync.tar.gz
+rm s3sync.tar.gz
+
+cd s3sync
+mkdir /etc/s3conf
+cp s3config.yml.example /etc/s3conf/s3config.yml
+vi /etc/s3conf/s3config.yml
+
+SET:
+
+aws_access_key_id: ------Your Access Key here ------
+aws_secret_access_key: ---- Your Secret Access Key here ------
+ssl_cert_dir: /home/your-user/s3sync/certs
+
+mkdir /home/your-user/s3sync/certs
+cd /home/your-user/s3sync/certs
+wget http://mirbsd.mirsolutions.de/cvs.cgi/~checkout~/src/etc/ssl.certs.shar
+sh ssl.certs.shar
+
+CONNECTION
+
+cd /home/your-user/s3sync
+# Create the bucket (add -s to use ssl)
+ruby s3cmd.rb createbucket shapeshed.com
+
+ruby s3sync.rb -r -s -v --exclude="cache$|captchas$" --delete /var/www/vhosts/ shapeshed.com:/vhosts > /var/log/s3sync
+
+AUTOMATIZATE BACKUP
+
+mkdir /home/your-user/shell_scripts
+cd /home/your-user/shell_scripts
+# Create and edit the file
+vi s3backup.sh
+
+#!/bin/bash
+ruby /home/your-user/s3sync/s3sync.rb -r -s -v --exclude="cache$|captchas$" --delete /var/www/vhosts/ shapeshed.com:/vhosts > /var/log/s3sync
+
+crontab -e
+
+# Add the following line. This runs the backup every Sunday at 6am
+0 6 * * 0 /home/your-user/shell_scripts/s3backup.sh

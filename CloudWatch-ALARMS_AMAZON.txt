@@ -1,0 +1,29 @@
+Instalacao de Patch de monitoramento Amazon
+
+
+
+
+yum install perl-Digest-SHA perl-URI perl-libwww-perl perl-MIME-tools perl-Crypt-SSLeay perl-XML-LibXML
+
+cd /root/
+mkdir CloudWatch
+cd CloudWatch
+wget http://ec2-downloads.s3.amazonaws.com/cloudwatch-samples/CloudWatchMonitoringScripts.zip
+unzip CloudWatchMonitoringScripts.zip
+rm CloudWatchMonitoringScripts.zip
+
+To put into CRON
+crontab -e
+PASTE
+*/5 * * * * ~/CloudWatch/mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/ --from-cron
+
+
+cd /root/CloudWatch
+
+./mon-put-instance-data.pl --mem-util --verify --verbose
+./mon-put-instance-data.pl --mem-util --mem-used --mem-avail
+
+./mon-get-instance-stats.pl --recent-hours=12
+./mon-put-instance-data.pl --mem-util --disk-space-util --disk-path=/
+
+

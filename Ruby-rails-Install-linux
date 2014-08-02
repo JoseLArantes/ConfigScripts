@@ -1,0 +1,11 @@
+yum install ruby
+yum install gcc g++ make automake autoconf curl-devel openssl-devel zlib-devel
+yum install ruby-rdoc ruby-devel
+yum install rubygems
+gem update
+gem update --system
+gem install rails
+
+
+
+

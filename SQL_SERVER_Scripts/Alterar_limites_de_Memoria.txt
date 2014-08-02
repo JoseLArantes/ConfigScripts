@@ -1,0 +1,12 @@
+#Para habilitar a edição do controle de memória
+sp_configure 'show advanced options', 1;
+GO
+RECONFIGURE;
+GO
+#Alterando 0 limite de memória
+sp_configure 'max server memory', 4096;
+GO
+RECONFIGURE;
+GO
+
+#Não é necessário reiniciar o servidor nem o serviço, esta ação é aplicada imediatamente.

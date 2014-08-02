@@ -1,0 +1,33 @@
+FreeNAS
+
+Install system VIA ISO (CD,DVD,PenDrive,Network)
+
+Start system, into fisical machine
+Configure Interfaces
+
+Log into webGUI
+User: admin
+Pass: freenas
+
+Change basic settings
+
+Create Link Aggregation (LAGG) if possible
+
+VOLUMES
+
+Chose filesystem
+
+ZFS - SUN combined filesystem and logical volume manager.
+UFS - Unix File System
+
+ISCSI
+
+Create Target Global Configuration
+Create Portal
+Create Initiators (ALL)
+Create Target
+Create Device Extents
+
+
+
+

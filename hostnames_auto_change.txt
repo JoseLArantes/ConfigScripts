@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+set $(date)
+periodo=$(date +"%d-%m-%Y-%H-%M")
+ipaddress=$(ifconfig eth0 | grep -oP '(?<=inet addr:)[0-9,.]*')
+
+	hostname "node-$periodo"
+	echo HOSTNAME="node-$periodo" >> /root/scripts/network
+	echo "$ipaddress node-$periodo" >> /etc/hosts
+	echo "$ipaddress node-$periodo" >> /root/configuracoes_node.txt
+	scp /root/configuracoes_node.txt  root@10.4.181.200:/nodes/
+	cp /root/scripts/network /etc/sysconfig/network
+	service network restart

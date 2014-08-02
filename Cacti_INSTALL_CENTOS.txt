@@ -1,0 +1,47 @@
+yum install -y mysql mysql-server httpd mod_ssl php php-snmp php-mysql net-snmp net-snmp-utils rrdtool cacti
+service mysqld start
+service httpd start
+service sendmail start
+chkconfig httpd on --levels 235
+chkconfig mysqld on --levels 235
+chkconfig sendmail on --levels 235
+# On running SELinux, it is necessary to modify allow the webserver to use sendmail
+setsebool httpd_can_sendmail on
+
+#Configuring MySQL, HTTP
+/usr/bin/mysql_secure_installation
+  #current root password is BLANK
+  #set root password to: STRONGPASSWORD1
+  #remove anonymous users
+  #disallow remote root login
+  #remove test database
+  $reload privilege tables
+mysqladmin -u root -p create cacti
+mysql -p cacti < /usr/share/doc/cacti-0.8.7e/cacti.sql
+mysql -u root -p mysql
+GRANT ALL ON cacti.* TO cactiuser@localhost IDENTIFIED BY 'STRONGPASSWORD2';
+flush privileges;
+exit
+
+#Configuring Cacti
+cp /etc/cacti/db.php /etc/cacti/db.php.orig
+vi /etc/cacti/db.php
+$database_password = "STRONGPASSWORD2";
+vi /etc/cron.d/cacti
+# Remove the # from the beginning of this line so it looks like this:
+*/5 * * * * cacti /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1
+vi /etc/httpd/conf.d/cacti.conf
+#
+# Cacti: An rrd based graphing tool
+#
+Alias /cacti /usr/share/cacti
+
+<Directory /usr/share/cacti/>
+Order Deny,Allow
+Deny from all
+Allow from all
+</Directory>
+
+scp -i /backup.pem root@www.carrouniversitario.com.br:/backup/transfer/data_full_2012-May-12.tar.gz /mnt/soho_storage/samba/shares/AWS/CARRO_UNIVERSITARIO/PRODUCAO/
+
+

@@ -1,0 +1,62 @@
+Configurar mod_cgi no Apache utilizando repositórios do CENTOS
+
+cd /etc/yum.repos.d/
+wget http://centos.karan.org/kbsingh-CentOS-Extras.repo
+
+[kbs-CentOS-Testing]
+name=CentOS.Karan.Org-EL$releasever - Testing
+gpgcheck=0
+gpgkey=http://centos.karan.org/RPM-GPG-KEY-karan.org.txt
+enabled=1
+baseurl=http://centos.karan.org/el$releasever/extras/testing/$basearch/RPMS/
+
+yum install mod_fcgid
+
+#Comentar completamente o arquivo:
+vim /etc/httpd/conf.d/php.conf
+
+#Acrescentar no final do arquivo php.ini
+vim /etc/php.ini
+cgi.fix_pathinfo = 1
+
+#Criar pasta para os scripts
+mkdir /var/www/php-fcgi-scripts
+
+#Criar pasta para o site dentro da pasta para scripts
+mkdir /var/www/php-fcgi-scripts/site1
+
+#Criar script para site
+vim /var/www/php-fcgi-scripts/site1/php-fcgi-starter
+
+#Inserir no arquivo
+#!/bin/sh
+PHPRC=/etc/
+export PHPRC
+export PHP_FCGI_MAX_REQUESTS=5000
+export PHP_FCGI_CHILDREN=8
+exec /usr/bin/php-cgi
+
+#Mudar as permissões no script
+chmod 755 /var/www/php-fcgi-scripts/site1/php-fcgi-starter
+chown -R user_site1 /var/www/php-fcgi-scripts/site1/php-fcgi-starter
+
+#Acrescentar no HTTPD.CONF do servidor, dentro do VirtualHost de cada site
+
+<IfModule mod_fcgid.c>
+    SuexecUserGroup user_site1 user_site1 #(user and group)
+    PHP_Fix_Pathinfo_Enable 1
+    <Directory /var/www/site1/> #(Path for the site)
+      Options +ExecCGI
+      AllowOverride All
+      AddHandler fcgid-script .php
+      FCGIWrapper /var/www/php-fcgi-scripts/site1/php-fcgi-starter .php #(path for the script)
+      Order allow,deny
+      Allow from all
+    </Directory>
+  </IfModule>
+  ServerSignature Off
+
+
+
+
+

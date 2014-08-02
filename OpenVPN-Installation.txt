@@ -1,0 +1,28 @@
+OpenVPN is a full-featured SSL VPN which implements OSI layer 2 or 3 secure network extension using the industry standard SSL/TLS protocol, supports flexible client authentication methods based on certificates, smart cards, and/or username/password credentials, and allows user or group-specific access control policies using firewall rules applied to the VPN virtual interface. OpenVPN is not a web application proxy and does not operate through a web browser.
+
+
+**Installation
+
+*Base
+
+yum install -y wget
+yum install -y yum-priorities 
+cd /tmp
+wget http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-1.el5.rf.x86_64.rpm
+rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+rpm -K rpmforge-release-0.5.2-1.el5.rf.x86_64.rpm
+yum install -y gcc make lzo lzo-devel openssl openssl-devel pam-devel
+
+*OpenVPN
+
+wget http://swupdate.openvpn.org/community/releases/openvpn-2.2.1.tar.gz ./
+tar -zxvf openvpn-2.2.1.tar.gz 
+cd openvpn-2.2.1
+./configure && make && make install
+
+*Master Certificate Authority
+
+
+
+
+

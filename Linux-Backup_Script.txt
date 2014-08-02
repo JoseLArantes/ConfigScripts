@@ -1,0 +1,61 @@
+#Script de Backup + Transferencia de Backup para site remoto
+
+#!/bin/bash
+#
+# creates backups of essential files
+#
+DATA="/opt/portais"
+CONFIG="/etc/httpd"
+LIST="/tmp/backlist_$$.txt"
+#
+#mount /mnt/backup
+set $(date)
+#
+#UNCOMMENT FOR INCREMENTAL
+#if test "$1" = "Wed" ; then
+        # weekly a full backup of all data and config. settings:
+        #
+        tar cfzv "/backup/data/data_full_$6-$2-$3.tar.gz" $DATA
+        rm -f /backup/data/data_diff*
+        cp /backup/data/data_full_$6-$2-$3.tar.gz /backup/transfer
+        #
+        tar cfzv "/backup/config/config_full_$6-$2-$3.tar.gz" $CONFIG
+        rm -f /backup/config/config_diff*
+        cp /backup/config/config_full_$6-$2-$3.tar.gz /backup/transfer
+#UNCOMMENT FOR INCREMENTAL
+#else
+        # incremental backup:
+        #
+#        find $DATA -depth -type f \( -ctime -1 -o -mtime -1 \) -print > $LIST
+#        tar cfzv "/backup/data/data_diff_$6-$2-$3.tar.gz" "$LIST"
+#        rm -f "$LIST"
+        #
+#        find $CONFIG -depth -type f  \( -ctime -1 -o -mtime -1 \) -print > $LIST
+#        tar cfzv "/backup/config/config_diff_$6-$2-$3.tar.gz" "$LIST"
+#        rm -f "$LIST"
+#fi
+#END OF INCREMENTAL OPTION
+#
+# create sql dump of databases:
+mysqldump -u root --password=root01p --all-databases > "/backup/database/alldatabases_$6-$2-$3.sql"
+gzip "/backup/database/alldatabases_$6-$2-$3.sql"
+cp /backup/database/alldatabases_$6-$2-$3.sql.gz /backup/transfer
+#
+#umount /mnt/backup
+
+
+
+############################
+# Este roda após toda a execução do primeiro!
+
+#!/bin/bash
+#
+# O objetivo deste script é providenciar uma cópia de Backup em um site remoto
+#
+DATA="/backup/transfer"
+#
+set $(date)
+        
+	tar cfzv "/backup/transfer/beblook_portais_social_engine_$6-$2-$3.tar.gz" $DATA
+	scp /backup/transfer/beblook_portais_social_engine_$6-$2-$3.tar.gz root@200.225.200.58:/beblook-backup
+	rm -rf /backup/transfer/*

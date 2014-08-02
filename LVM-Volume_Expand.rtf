@@ -1,0 +1,25 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265
+{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red234\green234\blue234;\red255\green255\blue255;
+}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl320
+
+\f0\fs24 \cf2 \cb3 $ fdisk /dev/sdc\
+\pard\pardeftab720\sl320
+
+\f1\fs26 \cf2 \cb4 Press \'91n\'92 to add a new partition. The type of disk we are adding is a primary, so press \'91p\'92 and as we are only putting a single partition on the disk, we can select partition number 1. Accept the geometry the machine suggests by pressing Enter on the questions. Don\'92t quit out of fdisk yet as we have more to do!\
+\
+\pard\pardeftab720\sl320
+
+\f0\fs24 \cf2 \cb3 $ vgextend vg_data /dev/sdc1\
+lvextend -L +1G /dev/mapper/vg_data /dev/sdc1\
+[root@localhost ~]# resize2fs /dev/ mapper/vg_data-lvdata\
+\
+\
+Pronto, aumentou a particao vg_data-lvdata em 1GB\
+usando um disco adicional\
+\
+\
+}

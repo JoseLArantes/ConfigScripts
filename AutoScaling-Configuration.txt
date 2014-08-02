@@ -1,0 +1,113 @@
+--------------------------------------Preparar ambiente-----------------------------------------------------
+export AWS_AUTO_SCALING_HOME=/Users/joseluiz/Documents/Dropbox/SCRIPTS/EC2/AutoScaling-1.0.61.1/
+export AWS_ELB_HOME=/Users/joseluiz/Documents/Dropbox/SCRIPTS/EC2/ElasticLoadBalancing-1.0.17.0/
+export EC2_HOME=/Users/joseluiz/Documents/Dropbox/SCRIPTS/EC2/ec2-api-tools-1.6.4
+export EC2_CERT=/Users/joseluiz/Documents/Dropbox/SCRIPTS/EC2/cert-MNUQZOIE6UXVS4CUGLKFU5MKTAQCVQ4I.pem
+export EC2_PRIVATE_KEY=/Users/joseluiz/Documents/Dropbox/SCRIPTS/EC2/pk-MNUQZOIE6UXVS4CUGLKFU5MKTAQCVQ4I.pem
+export JAVA_HOME='/System/Library/Frameworks/JavaVM.framework/Home/'
+export AWS_CLOUDWATCH_HOME=/Users/joseluiz/Documents/Dropbox/SCRIPTS/EC2/CloudWatch-1.0.13.4
+------------------------------------------------------------------------------------------------------------
+
+--------------------------------------Criacao do LAUNCH CONFIG----------------------------------------------
+./as-create-launch-config NomeDoLaunchConfig --image-id ami-0000000 --instance-type m1.medium --spot-price 0.07
+--Colocar spot-price indica que a instancia criada será spot, se não colocar será criada uma instancia on-demand
+------------------------------------------------------------------------------------------------------------
+------------------------------------------Criacao do GRUPO--------------------------------------------------
+./as-create-auto-scaling-group CarroStagingGroup --launch-configuration NomeDoLaunchConfigCriadoAnteriormente --availability-zones us-east-1a --max-size 2 --min-size 0
+EX: ./as-create-auto-scaling-group CarroProducaoLarge --launch-configuration CarroProducao --availability-zones us-east-1a --max-size 5 --min-size 0 --load-balancers CarroUniversitario
+--Máx size é o tamanho máximo do grupo, ou seja, o máximo de instancias que estarão ligadas nesse grupo
+--Min size é o tamanh mínimo do grupo, ou seja, o mínimo de instancias que estarão ligadas nesse grupo
+--Desired size é o tamanho desejado que o grupo deve ter
+--------Verificar status e configuracao do grupo
+./as-describe-auto-scaling-groups
+./as-describe-auto-scaling-groups CarroStagingGroup --headers
+./as-describe-auto-scaling-instances
+./as-describe-launch-configs
+./as-describe-scaling-activities
+------------------------------------------------------------------------------------------------------------
+------------------------------------Criacao de Politica de ALARME-------------------------------------------
+./as-put-scaling-policy StagingPolicy --auto-scaling-group CarroProducaoLarge --adjustment=1 --type ChangeInCapacity  --cooldown 300
+----adjustment é o número de instancias que serão criadas quando essa politica for acionada pelo alarme
+----cooldown é o número de segundos de intervalo que essa politica terá para ser acionada em relação a outras politicas
+----esse comando vai gerar o ARN que servirá de parametro para a criação do alarme
+------------------------------------------------------------------------------------------------------------
+-----------------------------------Criacao de ALARME no CloudWatch------------------------------------------
+----Utilizado a API do CloudWatch
+./mon-put-metric-alarm --alarm-name CarroUniStagingKillDown40 --alarm-description "Scale down at 40% load" --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 60 --threshold 40 --comparison-operator LessThanThreshold --dimensions InstanceId=i-4128273d --evaluation-periods 3 --unit Percent --alarm-actions AquiVem_o_ARN_do_comandoAnterior
+----dimensions indica que esse alarme será criado para aquele instancia, ou seja, quando o CPUUtilization daquela instancia flutuar nos limites, o alarme será disparado
+----após criar a Policy no AutoScaling, é possível criar ou alterar os alarmes pela console de gerenciamento Web.
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+-----------------------------------Outros comandos para referencia------------------------------------------
+./mon-put-metric-alarm StagingHighCPU --comparison-operator  GreaterThanThreshold  --evaluation-periods  1 --metric-name  CPUUtilization  --namespace  "AWS/EC2"  --period  600  --statistic Average --threshold 20 --alarm-actions arn:aws:autoscaling:us-east-1:746342876036:scalingPolicy:cd80cf7d-3dc6-4bf5-be59-5cdf3bac3f6f:autoScalingGroupName/CarroStagingGroup:policyName/StagingPolicy --dimensions "AutoScalingGroupName=CarroStagingGroup"
+./as-describe-auto-scaling-groups MyAutoScalingGroup --headers
+./as-update-auto-scaling-group CarroStagingGroup --launch-configuration CarroStaging --availability-zones us-east-1a --max-size 2 --min-size 0 --desired-capacity 0
+./as-update-auto-scaling-group as-create-launch-config CarroUniProducao --image-id ami-649d180d --instance-type m3.2xlarge --spot-price 0.15 --group sg-86c1b4ee
+./as-create-auto-scaling-group CarroUniProducaoGroup --launch-configuration CarroUniProducao --availability-zones us-east-1a --max-size 1 --min-size 0 --desired-capacity 0 --load-balancers CarroUniversitario
+./as-describe-auto-scaling-groups
+./as-update-auto-scaling-group --group sg-86c1b4ee
+s-put-scaling-policy CarroUniProd60 --auto-scaling-group CarroUniProducaoGroup --adjustment=-1 --type ChangeInCapacity  --cooldown 300
+./as-put-scaling-policy CarroUniProd60 --auto-scaling-group CarroUniProducaoGroup --adjustment=1 --type ChangeInCapacity  --cooldown 300
+./mon-describe-alarms
+./as-put-scaling-policy --auto-scaling-group CarroUniProducaoGroup --name CarroUniProdKill-01 --adjustment=-1 --type ChangeInCapacity --cooldown 300
+./as-create-launch-config CarroUniProducao --image-id ami-649d180d --instance-type m3.xlarge --spot-price 0.085 --security-group sg-86c1b4ee
+./as-create-launch-config CarroUniProducao --image-id ami-649d180d --instance-type m3.xlarge --spot-price 0.085 --group sg-86c1b4ee
+./as-delete-launch-config CarroUniProducao
+./as-create-launch-config CarroUniProducao40 --image-id ami-649d180d --instance-type m3.xlarge --spot-price 0.085 --group sg-86c1b4ee
+
+./as-update-auto-scaling-group CarroUniProducaoGroup --launch-configuration CarroUniProducao40
+	
+./as-put-scaling-policy Carro90ExtraR1 --auto-scaling-group CarroProducaoEXTRA --adjustment=-1 --type ChangeInCapacity  --cooldown 300
+
+./as-put-scaling-policy CarroUniProdKillDown60 --auto-scaling-group CarroUniProducaoGroup --adjustment=-4 --type ChangeInCapacity  --cooldown 300
+./as-describe-metric-collection-types
+./mon-put-metric-alarm --alarm-name CarroUniStagingKillDown40 --alarm-description "Scale down at 40% load" --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 60 --threshold 40 --comparison-operator LessThanThreshold --dimensions InstanceId=i-4128273d --evaluation-periods 3 --unit Percent --alarm-actions
+./as-put-scaling-policy CarroUniProdKill60 --auto-scaling-group CarroUniProducaoGroup --adjustment=-3 --type ChangeInCapacity  --cooldown 300
+./as-delete-policy CarroUniProdKillDown60
+
+
+./as-put-scaling-policy Carro90LR1 --auto-scaling-group CarroProducaoLNew --adjustment=-1 --type ChangeInCapacity  --cooldown 300
+
+./as-put-scaling-policy CarroProducaoMedium1 --auto-scaling-group CarroProducaoMedium --adjustment=1 --type ChangeInCapacity  --cooldown 300
+./as-put-scaling-policy CarroProducaoMediumR1 --auto-scaling-group CarroProducaoMedium --adjustment=-1 --type ChangeInCapacity  --cooldown 300
+./as-put-scaling-policy CarroProducaoMedium3 --auto-scaling-group CarroProducaoMedium --adjustment=3 --type ChangeInCapacity  --cooldown 300
+./as-put-scaling-policy CarroProducaoMediumR3 --auto-scaling-group CarroProducaoMedium --adjustment=-3 --type ChangeInCapacity  --cooldown 300
+
+
+./as-create-launch-config CarroProducaoLARGE --image-id ami-d15dd4b8 --instance-type m1.xlarge --spot-price 0.08 --group sg-86c1b4ee
+./as-create-launch-config CarroProducaoMEDIUM --image-id ami-d15dd4b8 --instance-type m3.xlarge --spot-price 0.08 --group sg-86c1b4ee
+./as-update-auto-scaling-group CarroProducaoMNew --launch-configuration CarroProducaoMEDIUM
+./as-update-auto-scaling-group CarroProducaoLNew --launch-configuration CarroProducaoLARGE
+
+Criando Imagem
+
+./ec2-create-image i-b47de6c7 --name Carro_Uni-Cluster-AwsLinux_New_21
+
+
+Mais padronizado
+
+  223  ./as-delete-launch-config CarroProducaoL
+  224  ./as-delete-launch-config CarroProducaoM
+  225  ./as-delete-launch-config CarroProducaoLEXTRA
+  226  ./as-create-launch-config CarroProducaoL --image-id ami-a63eaccf --instance-type c1.xlarge --spot-price 0.09 --group sg-86c1b4ee
+  227  ./as-create-launch-config CarroProducaoM --image-id ami-a63eaccf -instance-type m3.xlarge --spot-price 0.09 --group sg-86c1b4ee
+  228  ./as-create-launch-config CarroProducaoLEXTRA --image-id ami-a63eaccf --instance-type m1.xlarge --spot-price 0.08 --group sg-86c1b4ee
+  229  ./as-update-auto-scaling-group CarroProducaoMNew --launch-configuration CarroProducaoM
+  230  ./as-update-auto-scaling-group CarroProducaoLNew --launch-configuration CarroProducaoL
+  231  ./as-update-auto-scaling-group CarroProducaoEXTRA --launch-configuration CarroProducaoLEXTRA
+  345  ./as-describe-auto-scaling-groups
+
+Fim do mais padronizado
+
+isschlittler@senacrs.com.br,
+ schlitter_2010@hotmail.com,
+ leonecunha@hotmail.com,
+ vtalves@gmail.com,
+ mlealbr@gmail.com,
+ guilherme@cybertron.com.br,
+ marcelo_oka@hotmail.com
+
+
+Create spot instances
+./ec2-request-spot-instances ami-eb8a27f6 -p 0.043 --key carroonline-br --group applications --availability-zone sa-east-1a --instance-type sa-east-1a -n 1 --type one-time
+

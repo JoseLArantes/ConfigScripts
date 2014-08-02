@@ -1,0 +1,5 @@
+# edit count= to be the amount of extra swap you want
+dd if=/dev/zero of=/SWAP.img bs=1M count=128
+losetup /dev/loop7 /SWAP.img
+mkswap /dev/loop7
+swapon /dev/loop7

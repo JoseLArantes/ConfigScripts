@@ -1,0 +1,101 @@
+TFTP - PXE Server
+DHCP no Final
+
+##Firewall considerations
+
+TFTP Port: 69
+Liberar no firewall UDP e TCP
+
+
+##Config on CentOS/Redhat
+
+yum -y install tftp tftp-server
+
+vim /etc/xinetd.d/tftp
+##	set disable = no
+
+##restart xinetd
+
+service xinetd restart
+
+yum -y install syslinux
+cp /usr/lib/syslinux/{pxelinux.0,menu.c32,memdisk,mboot.c32,chain.c32} /tftpboot
+
+mkdir /tftpboot/pxelinux.cfg
+mkdir /tftpboot/images
+
+#Diretorio para minhas images de CentOS (Exemplo na versao 5.5)
+mkdir -p /tftpboot/images/centos/x86_64/5.5
+
+#montar a imagem do ISO do CentOS para copiar alguns arquivos (DVD da versao 5.5)
+mount -o loop /path/to/CentOS-5.5-x86_64-bin-DVD-1of2.iso /mnt
+
+cp /mnt/images/pxeboot/{vmlinuz,initrd.img} /tftpboot/images/centos/x86_64/5.5
+
+##Sobre os Menus
+##Criar um arquivo de menu
+
+touch /tftpboot/pxelinux.cfg/x32Servers
+##Copiar o conteudo abaixo no menu
+##Exemplo no arquivo /tftpboot/pxelinux.cfg/x32Servers
+
+MENU TITLE x32 Server Menu
+ 
+LABEL Main Menu
+ MENU LABEL Main Menu
+ KERNEL menu.c32
+ APPEND pxelinux.cfg/x32_Servers
+ 
+LABEL CentOS 5.5 x32
+ MENU LABEL CentOS 5.5 x32
+ KERNEL images/centos/x32/5.5/vmlinuz
+ APPEND initrd=images/centos/x32/5.5/initrd.img ramdisk_size=100000 ip=dhcp 
+ 
+LABEL Ubuntu 11.04 Server x32
+ MENU LABEL Ubuntu 11.04 Server x32
+ KERNEL images/ubuntu_x32/vmlinuz
+ APPEND ks=http://url.com/path/to/kickstart.cfg initrd=images/ubuntu_x32/initrd.img ramdisk_size=100000 ksdevice=eth0 ip=dhcp
+
+LABEL OpenSUSE 11.0
+ MENU LABEL OpenSUSE 11.0
+ KERNEL images/opensuse/linux
+ APPEND vga=normal initrd=images/opensuse/i386/11.0/initrd.img ramdisk_size=32768
+
+
+##Aqui o TFTP Server está pronto pra receber as conexoes dos servidores que usam BOOTP
+##O servidor DHCP agora deve apontar esse servidor como PXE para as requisicoes de BOOTP
+
+
+DHCP para este PXE
+
+yum install dhcp
+
+configurar /etc/dhcpd.conf
+Customizar o escopo de IP
+vim /etc/dhcpd.conf
+#
+# DHCP Server Configuration file.
+#   see /usr/share/doc/dhcp*/dhcpd.conf.sample  
+DHCPDARGS=eth0;
+ddns-update-style ad-hoc;
+allow booting;
+allow bootp;
+next-server 192.168.000.020;
+filename "/pxelinux.0";
+ignore client-updates;
+
+subnet 192.168.0.0 netmask 255.255.255.0 {
+        option routers                  192.168.0.1;
+        option subnet-mask              255.255.255.0;
+
+        option domain-name              "example.com";
+        option domain-name-servers       192.168.0.1;
+
+        option time-offset              -18000;     # Eastern Standard Time
+
+	range 192.168.0.90 192.168.0.100;
+}
+
+service dhcpd start
+
+#atencao para o firewall

@@ -1,0 +1,199 @@
+NGINX INSTALL
+
+yum install spawn-fcgi
+
+yum install php-pear-Net-Socket php-pear php-common php-gd php-devel php php-mbstring php-pear-Mail php-cli php-imap php-snmp php-pdo php-xml php-pear-Auth-SASL php-ldap php-pear-Net-SMTP php-mysql
+
+yum install nginx
+
+service nginx start
+
+wget http://integration4us.com/SE4_NGINX_INSTALLATION_FILES/php-fastcgi (se não existir mais o arquivo, copiar abaixo)
+
+mv php-fastcgi /etc/init.d/php-fastcgi
+
+chmod +x /etc/init.d/php-fastcgi
+
+/etc/init.d/php-fastcgi start
+
+netstat -tulpn | grep :9000
+
+wget http://integration4us.com/SE4_NGINX_INSTALLATION_FILES/default.conf (se não existir mais o arquivo, copiar abaixo)
+
+#Arquivo de configuracao do NGinx
+
+vim default.conf 
+
+mv default.conf /tmp/nginx_default.conf
+
+service nginx restart
+
+#Verificar erros em arquivo de log 
+
+tail -f /var/log/nginx/error.log 
+
+
+
+
+
+---------------------------------php-fastcgi
+#!/bin/sh
+#
+# php-cgi - php-fastcgi swaping via  spawn-fcgi
+#
+# chkconfig:   - 85 15
+# description:  Run php-cgi as app server
+# processname: php-cgi
+# config:      /etc/sysconfig/phpfastcgi (defaults RH style)
+# pidfile:     /var/run/php_cgi.pid
+# Note: See how to use this script :
+# http://www.cyberciti.biz/faq/rhel-fedora-install-configure-nginx-php5/
+# Source function library.
+. /etc/rc.d/init.d/functions
+ 
+# Source networking configuration.
+. /etc/sysconfig/network
+ 
+# Check that networking is up.
+[ "$NETWORKING" = "no" ] && exit 0
+ 
+spawnfcgi="/usr/bin/spawn-fcgi"
+php_cgi="/usr/bin/php-cgi"
+prog=$(basename $php_cgi)
+server_ip=127.0.0.1
+server_port=9000
+server_user=nginx
+server_group=nginx
+server_childs=3
+pidfile="/var/run/php_cgi.pid"
+ 
+# do not edit, put changes in /etc/sysconfig/phpfastcgi
+[ -f /etc/sysconfig/phpfastcgi ] && . /etc/sysconfig/phpfastcgi
+ 
+start() {
+    [ -x $php_cgi ] || exit 1
+    [ -x $spawnfcgi ] || exit 2
+    echo -n $"Starting $prog: "
+    daemon $spawnfcgi -a ${server_ip} -p ${server_port} -u ${server_user} -g ${server_group} -P ${pidfile} -C ${server_childs} -f ${php_cgi}
+    retval=$?
+    echo
+    return $retval
+}
+ 
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc -p ${pidfile} $prog -QUIT
+    retval=$?
+    echo
+    [ -f ${pidfile} ] && /bin/rm -f ${pidfile}
+    return $retval
+}
+ 
+restart(){
+	stop
+	sleep 2
+	start
+}
+ 
+rh_status(){
+	status -p ${pidfile} $prog
+}
+ 
+case "$1" in
+    start)
+        start;;
+    stop)
+        stop;;
+    restart)
+        restart;;
+    status)
+        rh_status;;
+    *)
+        echo $"Usage: $0 {start|stop|restart|status}"
+        exit 3
+esac
+
+----------------------------------fim do php-fastcgi
+
+
+------------------------------------------default.conf do NGinX
+
+server {
+    listen       80;
+    server_name  carrouniversitario.staging.beblook.net;
+
+    #charset koi8-r;
+    #access_log  /var/log/nginx/log/host.access.log  main;
+
+    root   /usr/share/nginx/html;
+    index  index.php index.html index.htm;
+
+
+    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt|htm)$ {
+    access_log off;
+    expires 30d;
+    }
+
+
+    # Get rid of index.php
+     location /index.php {
+     rewrite ^/(.*)$ /index.php?rewrite=2 last;
+    }
+
+    # Rewrite all directory-looking urls
+    location ~ /$ {
+     rewrite ^/(.*)$ /index.php?rewrite=1 last;
+    }
+
+    # Try to route missing files
+    # If the file doesn't exist, rewrite to index
+    try_files $uri $uri/ @exist;
+    location @exist {
+    rewrite ^(.*)$ /index.php?rewrite=1 last;
+    }
+
+    #location / {
+    #    root   /usr/share/nginx/html;
+    #    index  index.php index.html index.htm;
+    #}
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~ \.php$ {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  /usr/share/nginx/html$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+
+    location /install/ {
+    root /usr/share/nginx/html/install;
+    index index.php;
+    if (!-e $request_filename) { rewrite ^(.*)$ /install/index.php?rewrite=1; }
+    }
+
+}
+
+---------------Fim do default.conf do NGinX

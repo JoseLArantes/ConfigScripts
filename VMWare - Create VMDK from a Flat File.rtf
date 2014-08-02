@@ -1,0 +1,76 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1265
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fnil\fcharset0 LucidaGrande;\f2\fnil\fcharset0 Georgia;
+\f3\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red14\green71\blue128;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc0\levelnfcn0\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{decimal\}.}{\leveltext\leveltemplateid1\'02\'00.;}{\levelnumbers\'01;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{circle\}}{\leveltext\leveltemplateid2\'01\uc0\u9702 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww24300\viewh16680\viewkind0
+\deftab720
+\pard\tx940\tx1440\pardeftab720\li1440\fi-1440
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Start the terminal on the VMware host and log in as root.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Navigate to the directory where your flat file is located by using the following command:\uc0\u8232 cd /vmfs/volumes/your_volume/your_directory\u8232 Replace "your_volume" with the exact name of the volume and "your_directory" with the exact name of the directory.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Open the virtual machine configuration file (VMX file) and locate the "scsi#.virtualDev" line to identify the type of SCSI controller. For example, if you see "scsi1.virtualDev = lsilogic" the SCSI type is lsilogic.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Use the "ls -l file-flat.vmdk" command in the terminal to see the exact size of the flat file (in bytes) and write it down.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Type "vmkfstools -c 1234 -a SCSI -d thin temp.vmdk" (without quotes) in the terminal. Replace "1234" with the exact size of the flat file and "SCSI" with the SCSI type. Press "Enter" to create a new virtual disk. As usual, the temp.vmdk and temp-flat.vmdk files are created.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Use the "rm temp-flat.vmdk" command to delete the temp-flat.vmdk file.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Type "mv temp.vmdk example.vmdk" (without quotes) in the terminal. Replace "example.vmdk" with the name of your VMDK file. If the flat file is example-flat.vmdk, the VMDK file must be example.vmdk. Press "Enter" to rename the temporary VMDK.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Open the VMDK descriptor file with a text editor like Notepad or WordPad. You must change the descriptor to work with the old flat file.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Go to the Extent Description section and change the name of the flat file to the name of your orphaned flat file. For example, change "RW 8388608 VMFS vmdisk0-flat.vmdk" to "RW 8388608 VMFS example-flat.vmdk."
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Remove the "ddb.thinProvisioned = 1" line if the VMDK is not a thin disk. If it is, do not delete the line. Close the text editor and save the descriptor.
+\f3\fs26 \
+\ls1\ilvl1
+\f0\i\fs56 \cf2 {\listtext	
+\f1\i0 \uc0\u9702 
+\f0\i 	}
+\f2\i0\fs30 \cf0 Start the virtual machine.\uc0\u8232 
+\f3\fs26 \
+}

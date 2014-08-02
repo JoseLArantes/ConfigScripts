@@ -1,0 +1,90 @@
+#MONTAR PASTA DE SMB NO LINUX
+
+mount -t cifs //10.8.212.252/prontuarios2/prontuarios /home/servidorbkp/prontuarios -o username=tci,pass='TCP2011projetoIamspe',noexec
+
+#EXEMPLO DE SMB.CONF SIMPLES
+#Servidor de arquivos e backup
+#Responsavel NTI (Jose Luiz)
+[global]
+        add machine script = /usr/sbin/useradd  -c Machine -d /var/lib/nobody -s /bin/false %m$
+        security = user
+        workgroup = CENTRAL
+        netbios name = DATASERVER
+        netbios aliases = DATASERVER
+        server string = Servidor de Arquivos IAMSPE
+        unix charset = iso8859-1
+        display charset = cp850
+        #veto files = /*.cmd/*.pif/*.mp3/*.exe/*.dll/*.eml/*.nws/*.inf/*.rar/*.avi/*.mpeg/*.wma/*.x/*.rmvb/*.{*}/
+
+# Compartilhamentos
+
+[dados$]
+        writeable = yes
+        path = /home/nosso
+        force directory mode = 0777
+        force create mode = 0777
+        comment = Teste
+        valid users = nti-jluiz,prodesp
+        public = yes
+        veto files = /*.eml/*.nws/*.{*}/
+[grh_folha]
+        writeable = yes
+        path = /home/servidor/grh-folha
+        force directory mode = 0777
+        force create mode = 0777
+        create mask = 0777
+        comment = Folha
+        directory mask = 0777
+        valid users = grh-folha,nti-jluiz,bkp,prodesp
+        veto files = /*.eml/*.nws/*.{*}/
+[equipamentos]
+        writeable = yes
+        path = /home/servidor/equipamentos/
+        force directory mode = 0777
+        force create mode = 0777
+        create mask = 0777
+        comment = Sistema de Controle de Equipamentos de Informatica
+        directory mask = 0777
+        valid users = equipamentos,nti-jluiz,bkp,prodesp
+		veto files = /*.eml/*.nws/*.{*}/
+		
+		[cadastro]
+		        writeable = yes
+		        path = /home/servidor/cadastro/
+		        force directory mode = 0777
+		        force create mode = 0777
+		        create mask = 0777
+		        comment = Cadastro
+		        directory mask = 0777
+		        valid users = cadastro,nti-jluiz,fin-diretoria,financas,gti,bkp,prodesp
+		        veto files = /*.eml/*.nws/*.{*}/
+		[hspe_diretoria]
+		        writeable = yes
+		        path = /home/servidor/hspe-diretoria/
+		        force directory mode = 0777
+		        force create mode = 0777
+		        create mask = 0777
+		        comment = Diretoria HSPE
+		        directory mask = 0777
+		        valid users = diretoriahspe,nti-jluiz,bkp,prodesp
+		[vascular]
+		        force create mode = 0777
+		        comment = Diretoria HSPE
+		        valid users = cir-vascular,nti-jluiz,grh2,bkp,prodesp
+		        writeable = yes
+		        create mode = 0777
+		        path = /home/servidor/vascular
+		        force directory mode = 0777
+		        directory mode = 0777
+
+		[nac]
+				writeable = yes
+				path = /home/servidor/nac_decam/
+				force directory mode = 0777
+			    force create mode = 0777
+			    create mask = 0777
+		        comment = ENTRADA DE CONTAS CREDENCIADOS
+		        directory mask = 0777
+		        valid users = nac,fin-contabilidade,nti-jluiz,nac-leitura,financas,fin-diretoria,bkp,prodesp
+		        veto files = /*.eml/*.nws/*.{*}/
+

@@ -1,0 +1,116 @@
+yum install \
+        apr-1.2.7-11.el5_5.3\
+        apr-util-1.2.7-11.el5_5.1\
+        autoconf-2.59-12\
+        automake-1.9.6-2.3.el5\
+        bison-2.3-2.1\
+        curl-devel-7.15.5-9.el5\
+        curl-devel-7.15.5-9.el5\
+        cyrus-sasl-devel-2.1.22-5.el5_4.3\
+        db4-4.3.29-10.el5_5.2\
+        db4-4.3.29-10.el5_5.2\
+        db4-devel-4.3.29-10.el5_5.2\
+        db4-devel-4.3.29-10.el5_5.2\
+        e2fsprogs-1.39-23.el5_5.1\
+        e2fsprogs-devel-1.39-23.el5_5.1\
+        e2fsprogs-libs-1.39-23.el5_5.1\
+        e2fsprogs-libs-1.39-23.el5_5.1\
+        elfutils-0.137-3.el5\
+        elfutils-libs-0.137-3.el5\
+        flex-2.5.4a-41.fc6\
+        gcc-4.1.2-48.el5\
+        gettext-0.14.6-4.el5\
+        glibc-2.5-49.el5_5.7\
+        glibc-2.5-49.el5_5.7\
+        glibc-common-2.5-49.el5_5.7\
+        glibc-devel-2.5-49.el5_5.7\
+        glibc-headers-2.5-49.el5_5.7\
+        gpg-pubkey-37017186-45761324\
+        httpd-2.2.3-43.el5_5.3\
+        imake-1.0.2-3\
+        kernel-headers-2.6.18-194.26.1.el5\
+        keyutils-libs-devel-1.2-1.el5\
+        krb5-devel-1.6.1-36.el5_5.5\
+        krb5-libs-1.6.1-36.el5_5.5\
+        krb5-libs-1.6.1-36.el5_5.5\
+        krb5-workstation-1.6.1-36.el5_5.5\
+        libgomp-4.4.0-6.el5\
+        libidn-devel-0.6.5-1.1\
+        libmcrypt-2.5.7-1.2.el5.rf\
+        libmcrypt-devel-2.5.7-1.2.el5.rf\
+        libmhash-0.9.1-1.2.el5.rf\
+        libmhash-devel-0.9.1-1.2.el5.rf\
+        libpng-1.2.10-7.1.el5_5.3\
+        libpng-1.2.10-7.1.el5_5.3\
+        libpng-devel-1.2.10-7.1.el5_5.3\
+        libselinux-devel-1.33.4-5.5.el5\
+        libsepol-devel-1.15.2-3.el5\
+        libtool-1.5.22-7.el5_4\
+        libtool-ltdl-1.5.22-7.el5_4\
+        libtool-ltdl-1.5.22-7.el5_4\
+        libtool-ltdl-devel-1.5.22-7.el5_4\
+        libtool-ltdl-devel-1.5.22-7.el5_4\
+        libxml2-devel-2.6.26-2.1.2.8.el5_5.1\
+        libxml2-devel-2.6.26-2.1.2.8.el5_5.1\
+        mysql-5.0.77-4.el5_5.4\
+        mysql-devel-5.0.77-4.el5_5.4\
+        mysql-server-5.0.77-4.el5_5.4\
+        nscd-2.5-49.el5_5.7\
+        openldap-2.3.43-12.el5_5.2\
+        openldap-2.3.43-12.el5_5.2\
+        openldap-devel-2.3.43-12.el5_5.2\
+        openldap-devel-2.3.43-12.el5_5.2\
+        openssl-devel-0.9.8e-12.el5_4.6\
+        pam-0.99.6.2-6.el5_5.2\
+        pam-0.99.6.2-6.el5_5.2\
+        pam-devel-0.99.6.2-6.el5_5.2\
+        pam-devel-0.99.6.2-6.el5_5.2\
+        perl-DBD-MySQL-3.0007-2.el5\
+        perl-DBI-1.52-2.el5\
+        popt-1.10.2.3-20.el5_5.1\
+        popt-1.10.2.3-20.el5_5.1\
+        postgresql-libs-8.1.22-1.el5_5.1\
+        rpm-4.4.2.3-20.el5_5.1\
+        rpm-build-4.4.2.3-20.el5_5.1\
+        rpm-libs-4.4.2.3-20.el5_5.1\
+        rpm-python-4.4.2.3-20.el5_5.1\
+        screen-4.0.3-1.el5_4.1\
+        zlib-devel-1.2.3-3\
+
+mkdir sources
+cd sources
+wget 'http://ftp.unicamp.br/pub/apache//httpd/httpd-2.2.17.tar.bz2'
+tar -jxvf httpd-2.2.17.tar.bz2
+cd httpd-2.2.17
+./configure --with-included-apr --prefix=/opt/inex/apache --enable-rewrite --enable-so
+make
+make install
+cd ..
+wget 'http://br.php.net/get/php-5.3.3.tar.gz/from/ca.php.net/mirror'
+tar -zxvf php-5.3.3.tar.gz
+cd php-5.3.3
+ ./configure \
+  --prefix=/opt/inex/php \
+  --with-apxs2=/opt/inex/apache/bin/apxs \
+  --with-mysql \
+  --with-curl \
+  --with-gettext \
+  --with-ldap \
+  --with-zlib \
+  --with-gd \
+  --with-pear \
+  --with-libdir=lib64 \
+  --with-pear \
+  --enable-mbstring
+make
+make install
+cp php.ini-production /opt/inex/php/lib
+
+# vim /opt/inex/apache/conf/httpd.conf
+# Linha 56
+AddHandler application/x-httpd-php .php .phtml .php3 .php4
+#
+
+# incluir index.php em DirectoryIndex para o http.conf
+
+

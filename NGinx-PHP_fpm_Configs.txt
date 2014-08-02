@@ -1,0 +1,174 @@
+#Procedimento para instalação e configuraçao NGINX + PHP-FPM
+#CentOS 7.0
+
+#First update
+
+yum -y update
+
+echo '[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=0
+enabled=1' > /etc/yum.repos.d/nginx.repo
+
+yum -y install gcc gcc-c++ vim-enhanced pcre pcre-devel openssl openssl-devel zlib zlib-devel php-fpm gd php-gd php-common
+
+#############################################
+#Installing FROM SOURCE with security enhancements
+
+#Current version 1.6.0
+mkdir -p /opt/downloads/
+cd /opt/downloads/
+curl -O http://nginx.org/download/nginx-1.6.0.tar.gz
+
+tar -zxvf nginx-1.6.0.tar.gz
+
+#Before compiling make the changes
+#on src/http/ngx_http_header_filter_module.c
+
+#From
+static char ngx_http_server_string[] = "Server: nginx" CRLF;
+static char ngx_http_server_full_string[] = "Server: " NGINX_VER CRLF;
+#To
+static char ngx_http_server_string[] = "Server: Blind Web Server" CRLF;
+static char ngx_http_server_full_string[] = "Server: Blind Web Server" CRLF;
+
+#Then Install
+mkdir -p /etc/nginx
+./configure --user=nginx --group=ian --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --pid-path=/var/run/nginx.pid
+
+make && make install
+
+wget http://wiki.nginx.org/RedHatNginxInitScript /etc/init.d/nginx
+chmod +x /etc/init.d/nginx
+
+#Customizar o /etc/nginx/nginx.conf
+#Insert: server_tokens off;
+
+
+#############################################
+#Installing from repository
+#Source http://wiki.nginx.org/Install
+
+echo '[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=0
+enabled=1' > /etc/yum.repos.d/nginx.repo
+
+yum -y install nginx php-fpm gd php-gd php-common
+
+###############################################
+
+#ATTACHMENTS
+
+#PHP SECURITY ENHANCEMENT
+
+echo 'expose_php=Off
+display_errors=Off
+log_errors=On
+error_log=/var/log/nginx/php_error.log
+file_uploads=Off
+allow_url_fopen=Off
+allow_url_include=Off
+disable_functions =exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source' > /etc/php.d/security.ini
+
+#NGINX CONFIG FILE
+
+##NGINX.CONF
+
+echo 'worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+
+    server {
+        listen       80;
+        server_name  mvc-08.beakcloud.com;
+        root    /opt/sites;
+        server_tokens off;
+
+        location / {
+            root   html;
+            index  index.html index.htm index.php;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            fastcgi_param  SCRIPT_NAME      $fastcgi_script_name;
+            include        fastcgi_params;
+        }
+
+        location ~ /\. {
+            access_log off;
+            log_not_found off;
+            deny all;
+        }
+        location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+            access_log        off;
+            log_not_found     off;
+            expires           360d;
+        }
+
+}
+
+}' > /etc/nginx/nginx.conf
+
+
+##PHP-FPM.CONF
+
+echo 'include=/etc/php-fpm.d/*.conf
+[global]
+pid = /run/php-fpm/php-fpm.pid
+error_log = /var/log/php-fpm/error.log
+daemonize = no
+log_level = error
+emergency_restart_threshold = 10
+emergency_restart_interval = 1m
+process_control_timeout = 10s ' > /etc/php-fpm.conf
+
+
+##PHP-FPM.D/www.conf
+
+echo ' [www]
+listen = 127.0.0.1:9000
+
+listen.allowed_clients = 127.0.0.1
+user = nginx
+group = nginx
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+
+slowlog = /var/log/php-fpm/www-slow.log
+
+php_admin_value[error_log] = /var/log/php-fpm/www-error.log
+php_admin_flag[log_errors] = on
+php_value[session.save_handler] = files
+php_value[session.save_path] = /var/lib/php/session ' > /etc/php-fpm.d/www.conf
+
+##############################################
+
+#MySQL Installation
+
+yum -y install mariadb mariadb-server
+service mysql start
+mysql_secure_installation
+
+

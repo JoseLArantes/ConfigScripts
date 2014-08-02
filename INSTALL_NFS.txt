@@ -1,0 +1,42 @@
+##REF: http://www.cyberciti.biz/faq/centos-fedora-rhel-nfs-v4-configuration/
+##REF: http://www.unixmultiverse.com/index.php?option=com_content&view=article&id=53&Itemid=59
+
+yum install nfs-utils nfs4-acl-tools portmap
+vim /etc/exports
+/DIRECTORY/	*(rw,sync)
+
+/opt/zimbra/SHARE/	*(rw,sync)
+/opt/share/	*(rw,sync)
+chkconfig nfs on
+chkconfig portmap on
+
+#Necessita portmap no cliente
+
+#Edit idmapd.conf and set domain name
+vim /etc/idmapd.conf
+
+/etc/sysconfig/ifs
+
+# NFS port numbers
+#Portmap uses port 111
+fs
+STATD_PORT=10002
+STATD_OUTGOING_PORT=10003
+MOUNTD_PORT=10004
+RQUOTAD_PORT=10005
+
+LOCKD_UDPPORT=30001
+LOCKD_TCPPORT=30001
+
+#No client
+
+mount -t nfs server_IP:/DIRECTORY/ /localDIR
+
+ou
+
+mount -t nfs4 server_IP:/ /localDIR  (precisa do ,fsid=0 na declaracao do exports)
+
+http://www.cyberciti.biz/tips/how-to-configure-apache-web-server.html
+
+
+

@@ -1,0 +1,1275 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
+\cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Bold;
+\f3\fmodern\fcharset0 CourierNewPS-BoldMT;\f4\fswiss\fcharset0 ArialMT;\f5\fnil\fcharset0 HelveticaNeue;
+}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;\red0\green0\blue203;\red14\green0\blue0;
+\red247\green247\blue247;\red52\green52\blue52;\red246\green246\blue255;\red230\green230\blue230;}
+\paperw12240\paperh15840\margl1170\margr900\vieww26200\viewh14820\viewkind1
+\deftab720
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+
+\f0\fs24 \cf0 	\
+b0iXK92\
+E x T t k h J d s f z / 0\
+\
+Instala\'e7\'e3o do Servidor Portal da Familia\
+\
+Cliente GM\
+\
+GM Atual Redirect IP: 201.76.51.228\
+\
+Servidor\
+\
+Disco 01: \
+	Tamanho:	40 GB\
+	Parti\'e7\'f5es:	\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li1440\ri0
+\cf0 Filesystem            Size  Used Avail Use% Mounted on\
+/dev/xvda2            4.8G  1.1G  3.5G  23% /\
+/dev/xvda6            4.8G  138M  4.4G   4% /tmp\
+/dev/xvda1            9.5G  151M  8.9G   2% /home\
+/dev/xvda5             15G  166M   14G   2% /var/log\
+/dev/xvda7             99M  5.6M   89M   6% /var/log/audit\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+\cf0 		swap		: 760 MB\
+Disco 02:\
+	Tamanho:	70GB\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+\cf0 Parti\'e7\'f5es:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li1440\ri0
+\cf0 Filesystem            Size  Used Avail Use% Mounted on\
+/dev/xvdb1             68G  180M   65G   1% /opt\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+\cf0 	\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+\cf0 \
+Instala\'e7\'e3o CentOS 5.3\
+\
+	Formato da Instala\'e7\'e3o: Sele\'e7\'e3o manual de pacotes > nenhum pacote selecionado\
+\
+Comandos e Instala\'e7\'f5es de Pacotes\
+\
+XEN Tools\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f1 \cf0 mount /dev/xvdd /media\
+/media/Linux/./install.sh \
+reboot\
+yum update	\
+mkdir /app\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+
+\f0 \cf0 \
+DEMAIS   \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f1 \cf0 yum update\
+mkdir /app\
+yum install vim-enhanced\
+cd /app\
+touch pacotes_instalados\
+rpm \'96qa > pacotes_instalados\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f0 \cf0 \
+SELINUX\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f1 \cf0 \
+setenforce 0\
+/etc/selinux/sed -i 's/=enforcing/=disabled/g' config\
+\
+#Set timezone\
+	\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f0 \cf0 WEBSERVER
+\f1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+
+\f0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f1 \cf0 yum -y install gcc curl make httpd php php-common php-mysql php-mcrypt php-pdo php-mbstring php-gd php-xml php-cli php-pear php-devel php-json php-bcmath  pcre-devel mod_ssl mysql-server\
+\
+yum -y install php-mysql php-mcrypt php-pdo php-mbstring php-gd php-xml php-cli php-pear php-devel php-json php-bcmath\
+\
+pecl install apc\
+\
+touch /etc/yum.repos.d/CentOS-Testing.repo\
+vim /etc/yum.repos.d/CentOS-Testing.repo\
+\
+#Colar no arquivo\
+[c5-testing]\
+name=CentOS-5 Testing\
+baseurl=http://dev.centos.org/centos/$releasever/testing/$basearch/\
+enabled=1\
+gpgcheck=1\
+gpgkey=http://dev.centos.org/centos/RPM-GPG-KEY-CentOS-testing\
+includepkgs=php*\
+\
+yum update php\
+\
+\
+\
+useradd portal_familia\
+passwd portal_familia\
+(CHANGE PASS)\
+mkdir \'96p /opt/portal/portal_familia\
+chown portal_familia:portal_familia /opt/portal/portal_familia\
+\
+*Criar certificados digitais provis\'f3rios\
+\
+\pard\pardeftab720
+
+\f2\b \cf0 	
+\f1\b0 openssl req -new -x509 -nodes -out 
+\fs20 /etc/pki/tls/certs/portalfamilia.crt
+\fs24  -keyout 
+\fs20 /etc/pki/tls/certs/portalfamilia.key
+\fs24 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+\cf0 \
+*Utilizando certificados no httpd\
+*Vide http://httpd.apache.org/docs/2.0/ssl/ssl_faq.html\
+\
+*configurar MySql\
+service mysqld start\
+mysqladmin -u root password novasenha\
+\
+*Baixar e instalar o PHPMyAdmin\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+
+\f0 \cf0 cd /tmp\
+wget http://downloads.sourceforge.net/project/phpmyadmin/phpMyAdmin/3.4.5/phpMyAdmin-3.4.5-all-languages.tar.gz?r=http%3A%2F%2Fwww.phpmyadmin.net%2Fhome_page%2Fdownloads.php&ts=1318029299&use_mirror=ufpr\
+\
+tar -zxvf phpMyAdmin-3.4.5-all-languages.tar.gz\
+mv phpMyAdmin-3.4.5-all-languages.tar.gz phpMyAdmin\
+mv phpMyAdmin /opt/\
+touch /etc/httpd/conf.d/mysql.conf\
+* Criar o alias para mysql\
+echo "Alias /mysql /opt/phpmyadmin" > /etc/httpd/conf.d/mysql.conf\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+\cf0 SENHA PARA ACESSO AO DESENVOLVIMENTO\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+\cf0 *Criar um arquivo de senha na pasta base do portal\
+touch .htpasswd\
+*Criar usuarios e joga-los no arquito\
+*Para o primeiro usuario\
+htpasswd -c .htpasswd joseluiz\
+*Para os demais\
+htpasswd .htpasswd usuario\
+\
+*Incluir no arquivo .htaccess o seguinte\
+\
+AuthType Basic\
+AuthName "Restricted"\
+AuthUserFile /opt/portal/portal_familia/.htpasswd\
+Require valid-user\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+\cf0 HTTPD.CONF\
+##PRODU\'c7\'c3O\
+_____________________\
+ServerTokens Prod\
+\
+ServerRoot "/etc/httpd"\
+PidFile run/httpd.pid\
+TraceEnable Off\
+\
+Timeout 120\
+\
+KeepAlive Off\
+MaxKeepAliveRequests 100\
+KeepAliveTimeout 15\
+\
+<IfModule prefork.c>\
+        StartServers       8\
+        MinSpareServers    5\
+        MaxSpareServers   20\
+        ServerLimit      256\
+        MaxClients       256\
+        MaxRequestsPerChild  4000\
+</IfModule>\
+\
+<IfModule worker.c>\
+        StartServers         2\
+        MaxClients         150\
+        MinSpareThreads     25\
+        MaxSpareThreads     75\
+        ThreadsPerChild     25\
+        MaxRequestsPerChild  0\
+</IfModule>\
+\
+Listen 80\
+\
+LoadModule auth_basic_module modules/mod_auth_basic.so\
+LoadModule auth_digest_module modules/mod_auth_digest.so\
+LoadModule authn_file_module modules/mod_authn_file.so\
+LoadModule authn_alias_module modules/mod_authn_alias.so\
+LoadModule authn_anon_module modules/mod_authn_anon.so\
+LoadModule authn_dbm_module modules/mod_authn_dbm.so\
+LoadModule authn_default_module modules/mod_authn_default.so\
+LoadModule authz_host_module modules/mod_authz_host.so\
+LoadModule authz_user_module modules/mod_authz_user.so\
+LoadModule authz_owner_module modules/mod_authz_owner.so\
+LoadModule authz_groupfile_module modules/mod_authz_groupfile.so\
+LoadModule authz_dbm_module modules/mod_authz_dbm.so\
+LoadModule authz_default_module modules/mod_authz_default.so\
+LoadModule ldap_module modules/mod_ldap.so\
+LoadModule authnz_ldap_module modules/mod_authnz_ldap.so\
+LoadModule include_module modules/mod_include.so\
+LoadModule log_config_module modules/mod_log_config.so\
+LoadModule logio_module modules/mod_logio.so\
+LoadModule env_module modules/mod_env.so\
+LoadModule ext_filter_module modules/mod_ext_filter.so\
+LoadModule mime_magic_module modules/mod_mime_magic.so\
+LoadModule expires_module modules/mod_expires.so\
+LoadModule deflate_module modules/mod_deflate.so\
+LoadModule headers_module modules/mod_headers.so\
+LoadModule usertrack_module modules/mod_usertrack.so\
+LoadModule setenvif_module modules/mod_setenvif.so\
+LoadModule mime_module modules/mod_mime.so\
+LoadModule dav_module modules/mod_dav.so\
+LoadModule status_module modules/mod_status.so\
+LoadModule autoindex_module modules/mod_autoindex.so\
+LoadModule info_module modules/mod_info.so\
+LoadModule dav_fs_module modules/mod_dav_fs.so\
+LoadModule vhost_alias_module modules/mod_vhost_alias.so\
+LoadModule negotiation_module modules/mod_negotiation.so\
+LoadModule dir_module modules/mod_dir.so\
+LoadModule actions_module modules/mod_actions.so\
+LoadModule speling_module modules/mod_speling.so\
+LoadModule userdir_module modules/mod_userdir.so\
+LoadModule alias_module modules/mod_alias.so\
+LoadModule rewrite_module modules/mod_rewrite.so\
+LoadModule proxy_module modules/mod_proxy.so\
+LoadModule proxy_balancer_module modules/mod_proxy_balancer.so\
+LoadModule proxy_ftp_module modules/mod_proxy_ftp.so\
+LoadModule proxy_http_module modules/mod_proxy_http.so\
+LoadModule proxy_connect_module modules/mod_proxy_connect.so\
+LoadModule cache_module modules/mod_cache.so\
+LoadModule suexec_module modules/mod_suexec.so\
+LoadModule disk_cache_module modules/mod_disk_cache.so\
+LoadModule file_cache_module modules/mod_file_cache.so\
+LoadModule mem_cache_module modules/mod_mem_cache.so\
+LoadModule cgi_module modules/mod_cgi.so\
+LoadModule version_module modules/mod_version.so\
+\
+Include conf.d/*.conf\
+\
+User apache\
+Group apache\
+\
+ServerAdmin infra@corporatv.com\
+ServerName www.eutambemsougm.com.br:80\
+UseCanonicalName Off\
+\
+SSLCertificateFile      /etc/pki/tls/certs/www.eutambemsougm.com.br.csr\
+SSLCertificateKeyFile   /etc/pki/tls/certs/www.eutambemsougm.com.br.key\
+#SSLCertificateFile     /etc/pki/tls/certs/portalfamilia.crt\
+#SSLCertificateKeyFile  /etc/pki/tls/certs/portalfamilia.key\
+\
+#Password para o apache\
+\
+#AuthType Basic\
+#AuthName "Restricted Access"\
+# (Following line optional)\
+#AuthBasicProvider file\
+#AuthUserFile /usr/local/apache/passwd/passwords\
+#Require user joseluiz\
+\
+#fim do password para o apache\
+\
+DocumentRoot "/opt/portal/portal_familia"\
+\
+<Directory />\
+    Options FollowSymLinks\
+    AllowOverride None\
+</Directory>\
+\
+<Directory "/opt/portal/portal_familia">\
+\
+    Options Indexes FollowSymLinks\
+    AllowOverride All\
+    Order allow,deny\
+    Allow from all\
+\
+</Directory>\
+<IfModule mod_userdir.c>\
+    UserDir disable\
+</IfModule>\
+\
+DirectoryIndex index.php index.html index.html.var\
+\
+AccessFileName .htaccess\
+\
+<Files ~ "^\\.ht">\
+    Order allow,deny\
+    Deny from all\
+</Files>\
+\
+TypesConfig /etc/mime.types\
+DefaultType text/plain\
+\
+<IfModule mod_mime_magic.c>\
+    MIMEMagicFile conf/magic\
+</IfModule>\
+\
+HostnameLookups Off\
+\
+ErrorLog logs/error_log\
+\
+LogLevel warn\
+\
+LogFormat "%h %l %u %t \\"%r\\" %>s %b \\"%\{Referer\}i\\" \\"%\{User-Agent\}i\\"" combined\
+LogFormat "%h %l %u %t \\"%r\\" %>s %b" common\
+LogFormat "%\{Referer\}i -> %U" referer\
+LogFormat "%\{User-agent\}i" agent\
+\
+CustomLog logs/access_log combined\
+\
+ServerSignature Off\
+\
+Alias /icons/ "/var/www/icons/"\
+\
+<Directory "/var/www/icons">\
+    Options Indexes MultiViews\
+    AllowOverride None\
+    Order allow,deny\
+    Allow from all\
+</Directory>\
+#Alias /phpmyadmin /usr/share/phpMyAdmin\
+\
+<Directory "/usr/share/phpMyAdmin">\
+    Order allow,deny\
+    Allow from all   \
+</Directory>\
+\
+#\
+# WebDAV module configuration section.\
+# \
+<IfModule mod_dav_fs.c>\
+    # Location of the WebDAV lock database.\
+    DAVLockDB /var/lib/dav/lockdb\
+</IfModule>\
+\
+ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"\
+\
+<Directory "/var/www/cgi-bin">\
+    AllowOverride None\
+    Options None\
+    Order allow,deny\
+    Allow from all\
+</Directory>\
+\
+IndexOptions FancyIndexing VersionSort NameWidth=* HTMLTable\
+\
+AddIconByEncoding (CMP,/icons/compressed.gif) x-compress x-gzip\
+\
+AddIconByType (TXT,/icons/text.gif) text/*\
+AddIconByType (IMG,/icons/image2.gif) image/*\
+AddIconByType (SND,/icons/sound2.gif) audio/*\
+AddIconByType (VID,/icons/movie.gif) video/*\
+\
+AddIcon /icons/binary.gif .bin .exe\
+AddIcon /icons/binhex.gif .hqx\
+AddIcon /icons/tar.gif .tar\
+AddIcon /icons/world2.gif .wrl .wrl.gz .vrml .vrm .iv\
+AddIcon /icons/compressed.gif .Z .z .tgz .gz .zip\
+AddIcon /icons/a.gif .ps .ai .eps\
+AddIcon /icons/layout.gif .html .shtml .htm .pdf\
+AddIcon /icons/text.gif .txt\
+AddIcon /icons/c.gif .c\
+AddIcon /icons/p.gif .pl .py\
+AddIcon /icons/f.gif .for\
+AddIcon /icons/dvi.gif .dvi\
+AddIcon /icons/uuencoded.gif .uu\
+AddIcon /icons/script.gif .conf .sh .shar .csh .ksh .tcl\
+AddIcon /icons/tex.gif .tex\
+AddIcon /icons/bomb.gif core\
+\
+AddIcon /icons/back.gif ..\
+AddIcon /icons/hand.right.gif README\
+AddIcon /icons/folder.gif ^^DIRECTORY^^\
+AddIcon /icons/blank.gif ^^BLANKICON^^\
+\
+DefaultIcon /icons/unknown.gif\
+\
+ReadmeName README.html\
+HeaderName HEADER.html\
+\
+IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t\
+\
+AddLanguage ca .ca\
+AddLanguage cs .cz .cs\
+AddLanguage da .dk\
+AddLanguage de .de\
+AddLanguage el .el\
+AddLanguage en .en\
+AddLanguage eo .eo\
+AddLanguage es .es\
+AddLanguage et .et\
+AddLanguage fr .fr\
+AddLanguage he .he\
+AddLanguage hr .hr\
+AddLanguage it .it\
+AddLanguage ja .ja\
+AddLanguage ko .ko\
+AddLanguage ltz .ltz\
+AddLanguage nl .nl\
+AddLanguage nn .nn\
+AddLanguage no .no\
+AddLanguage pl .po\
+AddLanguage pt .pt\
+AddLanguage pt-BR .pt-br\
+AddLanguage ru .ru\
+AddLanguage sv .sv\
+AddLanguage zh-CN .zh-cn\
+AddLanguage zh-TW .zh-tw\
+\
+LanguagePriority en ca cs da de el eo es et fr he hr it ja ko ltz nl nn no pl pt pt-BR ru sv zh-CN zh-TW\
+\
+ForceLanguagePriority Prefer Fallback\
+\
+AddDefaultCharset UTF-8\
+\
+AddType application/x-compress .Z\
+AddType application/x-gzip .gz .tgz\
+\
+AddHandler type-map var\
+\
+AddType text/html .shtml\
+AddOutputFilter INCLUDES .shtml\
+\
+Alias /error/ "/var/www/error/"\
+<IfModule mod_negotiation.c>\
+<IfModule mod_include.c>\
+    <Directory "/var/www/error">\
+        AllowOverride None\
+        Options IncludesNoExec\
+        AddOutputFilter Includes html\
+        AddHandler type-map var\
+        Order allow,deny\
+        Allow from all\
+        LanguagePriority en es de fr\
+        ForceLanguagePriority Prefer Fallback\
+    </Directory>\
+\
+</IfModule>\
+</IfModule>\
+BrowserMatch "Mozilla/2" nokeepalive\
+BrowserMatch "MSIE 4\\.0b2;" nokeepalive downgrade-1.0 force-response-1.0\
+BrowserMatch "RealPlayer 4\\.0" force-response-1.0\
+BrowserMatch "Java/1\\.0" force-response-1.0\
+BrowserMatch "JDK/1\\.0" force-response-1.0\
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully\
+BrowserMatch "MS FrontPage" redirect-carefully\
+BrowserMatch "^WebDrive" redirect-carefully\
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully\
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully\
+BrowserMatch "^XML Spy" redirect-carefully\
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully\
+\
+# Disable TRACE / HTTP\
+RewriteEngine On\
+RewriteCond %\{REQUEST_METHOD\} ^TRACE\
+RewriteRule .* - [F]\
+\
+NameVirtualHost *:80\
+NameVirtualHost *:443\
+<VirtualHost *:80>\
+    ServerName www.eutambemsougm.com.br\
+    ServerAlias www.eutambemsougm.com.br\
+    RedirectPermanent / https://www.eutambemsougm.com.br/\
+    #DocumentRoot /opt/portal/portal_familia\
+    # Disable TRACE / HTTP\
+    RewriteEngine On\
+    RewriteCond %\{REQUEST_METHOD\} ^TRACE\
+    RewriteRule .* - [F]\
+</VirtualHost>\
+<VirtualHost *:443>\
+    ServerName www.eutambemsougm.com.br\
+    ServerAlias www.eutambemsougm.com.br\
+    DocumentRoot /opt/portal/portal_familia\
+    # Disable TRACE / HTTP\
+    RewriteEngine On\
+    RewriteCond %\{REQUEST_METHOD\} ^TRACE\
+    RewriteRule .* - [F]\
+</VirtualHost>\
+\
+_____________________\
+\
+\
+_____________________\
+DESENVOLVIMENTO\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\ri0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+\cf0 HTTPD.CONF\
+\
+ServerTokens OS\
+\
+ServerRoot "/etc/httpd"\
+PidFile run/httpd.pid\
+\
+Timeout 120\
+\
+KeepAlive Off\
+MaxKeepAliveRequests 100\
+KeepAliveTimeout 15\
+\
+<IfModule prefork.c>\
+        StartServers       8\
+        MinSpareServers    5\
+        MaxSpareServers   20\
+        ServerLimit      256\
+        MaxClients       256\
+        MaxRequestsPerChild  4000\
+</IfModule>\
+\
+<IfModule worker.c>\
+        StartServers         2\
+        MaxClients         150\
+        MinSpareThreads     25\
+        MaxSpareThreads     75\
+        ThreadsPerChild     25\
+        MaxRequestsPerChild  0\
+</IfModule>\
+\
+Listen 80\
+\
+LoadModule auth_basic_module modules/mod_auth_basic.so\
+LoadModule auth_digest_module modules/mod_auth_digest.so\
+LoadModule authn_file_module modules/mod_authn_file.so\
+LoadModule authn_alias_module modules/mod_authn_alias.so\
+LoadModule authn_anon_module modules/mod_authn_anon.so\
+LoadModule authn_dbm_module modules/mod_authn_dbm.so\
+LoadModule authn_default_module modules/mod_authn_default.so\
+LoadModule authz_host_module modules/mod_authz_host.so\
+LoadModule authz_user_module modules/mod_authz_user.so\
+LoadModule authz_owner_module modules/mod_authz_owner.so\
+LoadModule authz_groupfile_module modules/mod_authz_groupfile.so\
+LoadModule authz_dbm_module modules/mod_authz_dbm.so\
+LoadModule authz_default_module modules/mod_authz_default.so\
+LoadModule ldap_module modules/mod_ldap.so\
+LoadModule authnz_ldap_module modules/mod_authnz_ldap.so\
+LoadModule include_module modules/mod_include.so\
+LoadModule log_config_module modules/mod_log_config.so\
+LoadModule logio_module modules/mod_logio.so\
+LoadModule env_module modules/mod_env.so\
+LoadModule ext_filter_module modules/mod_ext_filter.so\
+LoadModule mime_magic_module modules/mod_mime_magic.so\
+LoadModule expires_module modules/mod_expires.so\
+LoadModule deflate_module modules/mod_deflate.so\
+LoadModule headers_module modules/mod_headers.so\
+LoadModule usertrack_module modules/mod_usertrack.so\
+LoadModule setenvif_module modules/mod_setenvif.so\
+LoadModule mime_module modules/mod_mime.so\
+LoadModule dav_module modules/mod_dav.so\
+LoadModule status_module modules/mod_status.so\
+LoadModule autoindex_module modules/mod_autoindex.so\
+LoadModule info_module modules/mod_info.so\
+LoadModule dav_fs_module modules/mod_dav_fs.so\
+LoadModule vhost_alias_module modules/mod_vhost_alias.so\
+LoadModule negotiation_module modules/mod_negotiation.so\
+LoadModule dir_module modules/mod_dir.so\
+LoadModule actions_module modules/mod_actions.so\
+LoadModule speling_module modules/mod_speling.so\
+LoadModule userdir_module modules/mod_userdir.so\
+LoadModule alias_module modules/mod_alias.so\
+LoadModule rewrite_module modules/mod_rewrite.so\
+LoadModule proxy_module modules/mod_proxy.so\
+LoadModule proxy_balancer_module modules/mod_proxy_balancer.so\
+LoadModule proxy_ftp_module modules/mod_proxy_ftp.so\
+LoadModule proxy_http_module modules/mod_proxy_http.so\
+LoadModule proxy_connect_module modules/mod_proxy_connect.so\
+LoadModule cache_module modules/mod_cache.so\
+LoadModule suexec_module modules/mod_suexec.so\
+LoadModule disk_cache_module modules/mod_disk_cache.so\
+LoadModule file_cache_module modules/mod_file_cache.so\
+LoadModule mem_cache_module modules/mod_mem_cache.so\
+LoadModule cgi_module modules/mod_cgi.so\
+LoadModule version_module modules/mod_version.so\
+\
+Include conf.d/*.conf\
+\
+User apache\
+Group apache\
+\
+ServerAdmin infra@corporatv.com\
+ServerName www.eutambemsougm.com.br:80\
+UseCanonicalName Off\
+\
+\pard\tx916\tx1832\tx2748\tx3664\tx4580\tx5496\tx6412\tx7328\tx8244\tx9160\tx10076\tx10992\tx11908\tx12824\tx13740\tx14656\pardeftab720\ri0
+
+\f1\fs20 \cf0 SSLCertificateFile	/etc/pki/tls/certs/portalfamilia.crt\
+SSLCertificateKeyFile	/etc/pki/tls/certs/portalfamilia.key\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+
+\f0\fs24 \cf0 \
+\
+DocumentRoot "/opt/portal/portal_familia"\
+\
+<Directory />\
+    Options FollowSymLinks\
+    AllowOverride None\
+</Directory>\
+\
+<Directory "/opt/portal/portal_familia">\
+\
+    Options Indexes FollowSymLinks\
+    AllowOverride All\
+    Order allow,deny\
+    Allow from all\
+\
+</Directory>\
+<IfModule mod_userdir.c>\
+    UserDir disable\
+</IfModule>\
+\
+DirectoryIndex index.php index.html index.html.var\
+\
+AccessFileName .htaccess\
+\
+<Files ~ "^\\.ht">\
+    Order allow,deny\
+    Deny from all\
+</Files>\
+\
+TypesConfig /etc/mime.types\
+DefaultType text/plain\
+\
+<IfModule mod_mime_magic.c>\
+    MIMEMagicFile conf/magic\
+</IfModule>\
+\
+HostnameLookups Off\
+\
+ErrorLog logs/error_log\
+\
+LogLevel warn\
+\
+LogFormat "%h %l %u %t \\"%r\\" %>s %b \\"%\{Referer\}i\\" \\"%\{User-Agent\}i\\"" combined\
+LogFormat "%h %l %u %t \\"%r\\" %>s %b" common\
+LogFormat "%\{Referer\}i -> %U" referer\
+LogFormat "%\{User-agent\}i" agent\
+\
+CustomLog logs/access_log combined\
+\
+ServerSignature On\
+\
+Alias /icons/ "/var/www/icons/"\
+\
+<Directory "/var/www/icons">\
+    Options Indexes MultiViews\
+    AllowOverride None\
+    Order allow,deny\
+    Allow from all\
+</Directory>\
+#Alias /phpmyadmin /usr/share/phpMyAdmin\
+\
+<Directory "/usr/share/phpMyAdmin">\
+    Order allow,deny\
+    Allow from all   \
+</Directory>\
+\
+#\
+# WebDAV module configuration section.\
+# \
+<IfModule mod_dav_fs.c>\
+    # Location of the WebDAV lock database.\
+    DAVLockDB /var/lib/dav/lockdb\
+</IfModule>\
+\
+ScriptAlias /cgi-bin/ "/var/www/cgi-bin/"\
+\
+<Directory "/var/www/cgi-bin">\
+    AllowOverride None\
+    Options None\
+    Order allow,deny\
+    Allow from all\
+</Directory>\
+\
+IndexOptions FancyIndexing VersionSort NameWidth=* HTMLTable\
+\
+AddIconByEncoding (CMP,/icons/compressed.gif) x-compress x-gzip\
+\
+AddIconByType (TXT,/icons/text.gif) text/*\
+AddIconByType (IMG,/icons/image2.gif) image/*\
+AddIconByType (SND,/icons/sound2.gif) audio/*\
+AddIconByType (VID,/icons/movie.gif) video/*\
+\
+AddIcon /icons/binary.gif .bin .exe\
+AddIcon /icons/binhex.gif .hqx\
+AddIcon /icons/tar.gif .tar\
+AddIcon /icons/world2.gif .wrl .wrl.gz .vrml .vrm .iv\
+AddIcon /icons/compressed.gif .Z .z .tgz .gz .zip\
+AddIcon /icons/a.gif .ps .ai .eps\
+AddIcon /icons/layout.gif .html .shtml .htm .pdf\
+AddIcon /icons/text.gif .txt\
+AddIcon /icons/c.gif .c\
+AddIcon /icons/p.gif .pl .py\
+AddIcon /icons/f.gif .for\
+AddIcon /icons/dvi.gif .dvi\
+AddIcon /icons/uuencoded.gif .uu\
+AddIcon /icons/script.gif .conf .sh .shar .csh .ksh .tcl\
+AddIcon /icons/tex.gif .tex\
+AddIcon /icons/bomb.gif core\
+\
+AddIcon /icons/back.gif ..\
+AddIcon /icons/hand.right.gif README\
+AddIcon /icons/folder.gif ^^DIRECTORY^^\
+AddIcon /icons/blank.gif ^^BLANKICON^^\
+\
+DefaultIcon /icons/unknown.gif\
+\
+ReadmeName README.html\
+HeaderName HEADER.html\
+\
+IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t\
+\
+AddLanguage ca .ca\
+AddLanguage cs .cz .cs\
+AddLanguage da .dk\
+AddLanguage de .de\
+AddLanguage el .el\
+AddLanguage en .en\
+AddLanguage eo .eo\
+AddLanguage es .es\
+AddLanguage et .et\
+AddLanguage fr .fr\
+AddLanguage he .he\
+AddLanguage hr .hr\
+AddLanguage it .it\
+AddLanguage ja .ja\
+AddLanguage ko .ko\
+AddLanguage ltz .ltz\
+AddLanguage nl .nl\
+AddLanguage nn .nn\
+AddLanguage no .no\
+AddLanguage pl .po\
+AddLanguage pt .pt\
+AddLanguage pt-BR .pt-br\
+AddLanguage ru .ru\
+AddLanguage sv .sv\
+AddLanguage zh-CN .zh-cn\
+AddLanguage zh-TW .zh-tw\
+\
+LanguagePriority en ca cs da de el eo es et fr he hr it ja ko ltz nl nn no pl pt pt-BR ru sv zh-CN zh-TW\
+\
+ForceLanguagePriority Prefer Fallback\
+\
+AddDefaultCharset UTF-8\
+\
+AddType application/x-compress .Z\
+AddType application/x-gzip .gz .tgz\
+\
+AddHandler type-map var\
+\
+AddType text/html .shtml\
+AddOutputFilter INCLUDES .shtml\
+\
+Alias /error/ "/var/www/error/"\
+<IfModule mod_negotiation.c>\
+<IfModule mod_include.c>\
+    <Directory "/var/www/error">\
+        AllowOverride None\
+        Options IncludesNoExec\
+        AddOutputFilter Includes html\
+        AddHandler type-map var\
+        Order allow,deny\
+        Allow from all\
+        LanguagePriority en es de fr\
+        ForceLanguagePriority Prefer Fallback\
+    </Directory>\
+\
+</IfModule>\
+</IfModule>\
+\
+BrowserMatch "Mozilla/2" nokeepalive\
+BrowserMatch "MSIE 4\\.0b2;" nokeepalive downgrade-1.0 force-response-1.0\
+BrowserMatch "RealPlayer 4\\.0" force-response-1.0\
+BrowserMatch "Java/1\\.0" force-response-1.0\
+BrowserMatch "JDK/1\\.0" force-response-1.0\
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully\
+BrowserMatch "MS FrontPage" redirect-carefully\
+BrowserMatch "^WebDrive" redirect-carefully\
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully\
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully\
+BrowserMatch "^XML Spy" redirect-carefully\
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully\
+\
+NameVirtualHost *:80\
+NameVirtualHost *:443\
+<VirtualHost *:80>\
+    ServerName beblook.net\
+    ServerAlias beblook.net\
+    DocumentRoot /opt/beblook\
+</VirtualHost>\
+<VirtualHost *:80>\
+    ServerName www.beblook.net\
+    ServerAlias www.beblook.net\
+    DocumentRoot /opt/beblook\
+</VirtualHost>\
+<VirtualHost *:80>\
+    ServerName portalfamilia.staging.beblook.net\
+    ServerAlias portalfamilia.staging.beblook.net\
+    DocumentRoot /opt/portal/portal_familia\
+   #Redireciona HTTP para HTTPS\
+   RewriteEngine On\
+   RewriteCond %\{HTTPS\} off\
+   RewriteRule (.*) https://%\{HTTP_HOST\}%\{REQUEST_URI\}\
+</VirtualHost>\
+<VirtualHost *:443>\
+    ServerName portalfamilia.staging.beblook.net\
+    ServerAlias portalfamilia.staging.beblook.net\
+    DocumentRoot /opt/portal/portal_familia\
+</VirtualHost>\
+<VirtualHost *:80>\
+    ServerName www.eutambemsougm.com.br\
+    ServerAlias www.eutambemsougm.com.br\
+    DocumentRoot /opt/portal/portal_familia\
+   #Redireciona HTTP para HTTPS\
+   RewriteEngine On\
+   RewriteCond %\{HTTPS\} off\
+   RewriteRule (.*) https://%\{HTTP_HOST\}%\{REQUEST_URI\}\
+</VirtualHost>\
+<VirtualHost *:443>\
+    ServerName www.eutambemsougm.com.br\
+    ServerAlias www.eutambemsougm.com.br\
+    DocumentRoot /opt/portal/portal_familia\
+</VirtualHost>\
+\
+\
+\
+SEGURAN\'c7A\
+\
+/etc/sysconfig/iptables\
+\
+:INPUT DROP [0:0]\
+:FORWARD DROP [0:0]\
+:OUTPUT ACCEPT [0:0]\
+:RH-Firewall-1-INPUT - [0:0]\
+-A INPUT -j RH-Firewall-1-INPUT\
+-A FORWARD -j RH-Firewall-1-INPUT\
+-A RH-Firewall-1-INPUT -i lo -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type echo-reply -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type time-exceeded -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type echo-request -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT\
+-A RH-Firewall-1-INPUT -j REJECT --reject-with icmp-host-prohibited\
+COMMIT\
+\
+\
+\
+CERTIFICADO DIGITAL\
+\
+* Gerar certificado\
+\
+* Pass do certificado\
+> socialsobmedida\
+\
+openssl genrsa -des3 -out /etc/pki/tls/certs/www.beblook.com.br.key 2048\
+\
+openssl req -new -key /etc/pki/tls/certs/www.eutambemsougm.com.br.key -out /etc/pki/tls/certs/www.eutambemsougm.com.br.csr\
+\
+\pard\pardeftab720
+
+\f3\b\fs26 \cf0 \cb2 openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+\f0\b0\fs24 \cb1 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0
+\cf0 \
+ www.eutambemsougm.com.br.csr\
+\
+\
+Dados do certificado da GoDaddy\
+\
+\pard\pardeftab720
+
+\f4\fs26 \cf0 -----BEGIN RSA PRIVATE KEY-----\
+Proc-Type: 4,ENCRYPTED\
+DEK-Info: DES-EDE3-CBC,768CB837C1B52490\
+\
+nf7rpfEQ+/bpZT/XxgFvU6veIcpJ8sYU0V7egv5ix0pqg4hTmyeEREzSx2un/LIF\
+jQt5QlHwxvizV5t/PEGwYW6RVMA1Zd7dW8pxUK6MRIoUgMAwKnbLhxkP6mLLHY7+\
+3aPyTXvWkqQYgea4azulsDh1AdVtlO7soTtvj8V6cfl7natkMx5+oNy0+Anj9oBY\
+eZ4AEa+NYq3DuBQ4o2rCyljUDX4mhrrbJbthB8BP1RZfMRR3T1/IASEQszqLPHpJ\
+G+PxRcLrnLfa35He8szAAr6bgG7MXFh8F+CGyYhsXKgTe8+hYyrqjYodSNGFnIG3\
+CYoTaXPz4ipE7aWRuK6LjdxCAXGn9P88dcB13/A/MRk/NWLB6w8wPSv5PYFw1rd8\
+W3Ed2D3fxTGz38chsFg7BFUVuI2VehnAvsye56gvX0S2d694fraonboX2zJ09BWh\
+M/ysSiRu3jo5D8v9SoCtyUj5r3s13JWtnk0NUf+2lDvwfAgPGdIhT5ZdyLUWszti\
+NL3BuNRMaD1zBHS0Semb2S+5rInj/2aoZUuVwaOgGCai11/8RAor15kZY4rmO0hb\
+oyP8D12ui9Y7sSdihV4iMLfC5LNrux2su2ZWMrrK6rbtOU4Vu+jix24ZydfR2RSM\
+ykLqCDDZrARsSFzOArSRJBtQtkmCvzybYmRIQ9E+llqU6CrF+qPfvQBZ1xVUvlct\
+QxNnpQatcZTdvOTwEfq8/pe/1rdvds4b8lPXES1ykhwlr/0SQFqH170mXy+U6iac\
+x7jbbyMMPdFsqz6viIW8HPGMD7iVgr/c031A9aqY0a3hypBPq++XA18JLXiNZnHI\
+KKNXHAQlbh3vQN6YbgonvczmASvkmdvrFziPJIXok7Pg554VEAFzjc4qT2uila7J\
+WMiASHbGjdycAdwBVdl4ON1/C7mCVEJMV5pGAPi+/Y8zjkPh4pjEcNxrpQ2KxnCQ\
+4FrbDb58VTDnjdFPVxKb7cF344tuc2zFr29JyNH05cDUPQDFj7TlnIQstOi1onLE\
+/rvNSFEFu0axZNfVVCg7I7oSmlkoJpGq07umSSxI63S5xmWNQ+rKELzjhgA4RvKj\
+G9UlRsXkI7SqtRmOHnexO50fQ7rCrHSkT1/RuBQZYAdvHpMH5q5FBbr0q49bek0v\
+hN28zOMQ3JthZdCBLTI/1ps181sKsPhJgglZ/dpa/7085KGkXPrbYVLgdOM6De3d\
+MhAY7tonMraC956N7QC5m2eHagQyNedL70v4OefWWhtwQbsCpBQk0i3FeG+K+DKg\
+PlTvljZZndGVm9joHLwAIqmcDz/hgnaBb/5dMSp/8ybMhUMGAv+yhgh0ezC3lDli\
+WMEjuMnQ3eVMtIoialn/57IwGxZJQQJEwPL/wUAX8BGAKhQ1Wosl5zNCQSrnyyDG\
+bbqKgz8+/Mb6VwR8kxHQDz0GshufcO7zIOoWX+Vp448WTOFCwVCQk12s70owPiFE\
+r+uk/ibcBFnN2Zv7TO0+N5tpefr17/ioM3BsRYgP8D4Qy7WAlb8jYVpeaIEZaFKk\
+gi87zYV+BOSU59O0odacGgPLz63qt4Fx6yWd9hpo8CtKJWuHlfNfmpl4BgaULahk\
+-----END RSA PRIVATE KEY-----\
+\
+CSR - {\field{\*\fldinst{HYPERLINK "http://www.eutambemsougm.com.br/"}}{\fldrslt \cf3 \ul \ulc3 www.eutambemsougm.com.br}}\
+\
+-----BEGIN CERTIFICATE REQUEST-----\
+MIIC5zCCAc8CAQAwgaExCzAJBgNVBAYTAkJSMQswCQYDVQQIEwJTUDESMBAGA1UE\
+BxMJU2FvIFBhdWxvMSEwHwYDVQQKExh3d3cuZXV0YW1iZW1zb3VnbS5jb20uYnIx\
+ITAfBgNVBAMTGHd3dy5ldXRhbWJlbXNvdWdtLmNvbS5icjErMCkGCSqGSIb3DQEJ\
+ARYcY29udGF0b0BldXRhbWJlbXNvdWdtLmNvbS5icjCCASIwDQYJKoZIhvcNAQEB\
+BQADggEPADCCAQoCggEBAOGdaoq9GY0GbIzOkRzSYD/GupbQR7RXyymIXC0NZeKr\
++C8SHmIs5hKygiicH2IXsgt4wwD6OyMcaZ4++9/ai2AcTGcDRsUvM6dGYes491kl\
+4+jvXozt7xp8RCXRqPJZFjXMHwcHaZHWqXkBJ9jWCtuYzzHQASvVKcYXC39Vq5+Z\
+qSXlPr199et7YCNw9/Y52Wrg5/NiwIqkZ2Zg/iVpcXG6+HTghGVA1zcuzu0chqUU\
+F9hmJCdf6oal6x4HWkjMcJX7jUuXcef1sBCApfWAxwQ/bYft4TQfzC6cP+4VO4aZ\
+EMI1qk29Sr+a1tCDoUC4hQpiA3PV6UQgNCUpfpQ/WYcCAwEAAaAAMA0GCSqGSIb3\
+DQEBBQUAA4IBAQDP0S0qie62nFFENfmfuQMqbq+lH6niybaD4k5mvUVg2l284Mlx\
+dKXVyvIrKRA6ArutPeqBtCUZ1pO6ZF73oOEK1spBk9nnn18opX1aSsL8DGsI42B4\
+iUkRYdsorqUNYiTLtUpg9NrgmHR2KaN6VukJh1Pe+Gx3gGnm6t+l7piedDmlJ1mI\
+ES1eWY3mN9aIGR8MWr1RVwlquWtqq70/GEyaJauS03nSARjmHxJZQ88Y3tJRsEMV\
+Hc614rTFD+NnOA6nFMj+D8/5Mgn+QD+Q/4MsKbUFxlWWVmyDzUXCD8WTGmZsblrO\
+t6WE4dgCGar7miJag1rybm90w4BF9xg4aHU9\
+-----END CERTIFICATE REQUEST-----\
+\
+Dados do certificado (By #openssl req -noout -text -in /etc/pki/tls/certs/www.eutambemsougm.com.br.csr)\
+\
+Certificate Request:\
+\'a0 \'a0 Data:\
+\'a0 \'a0 \'a0 \'a0 Version: 0 (0x0)\
+\'a0 \'a0 \'a0 \'a0 Subject: C=BR, ST=SP, L=Sao Paulo, O={\field{\*\fldinst{HYPERLINK "http://www.eutambemsougm.com.br/"}}{\fldrslt \cf3 \ul \ulc3 www.eutambemsougm.com.br}}, CN={\field{\*\fldinst{HYPERLINK "http://www.eutambemsougm.com.br/emailAddress=contato@eutambemsougm.com.br"}}{\fldrslt \cf3 \ul \ulc3 www.eutambemsougm.com.br/emailAddress=contato@eutambemsougm.com.br}}\
+\'a0 \'a0 \'a0 \'a0 Subject Public Key Info:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 Public Key Algorithm: rsaEncryption\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 RSA Public Key: (2048 bit)\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 Modulus (2048 bit):\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 00:e1:9d:6a:8a:bd:19:8d:06:6c:8c:ce:91:1c:d2:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 60:3f:c6:ba:96:d0:47:b4:57:cb:29:88:5c:2d:0d:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 65:e2:ab:f8:2f:12:1e:62:2c:e6:12:b2:82:28:9c:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 1f:62:17:b2:0b:78:c3:00:fa:3b:23:1c:69:9e:3e:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 fb:df:da:8b:60:1c:4c:67:03:46:c5:2f:33:a7:46:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 61:eb:38:f7:59:25:e3:e8:ef:5e:8c:ed:ef:1a:7c:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 44:25:d1:a8:f2:59:16:35:cc:1f:07:07:69:91:d6:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 a9:79:01:27:d8:d6:0a:db:98:cf:31:d0:01:2b:d5:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 29:c6:17:0b:7f:55:ab:9f:99:a9:25:e5:3e:bd:7d:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 f5:eb:7b:60:23:70:f7:f6:39:d9:6a:e0:e7:f3:62:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 c0:8a:a4:67:66:60:fe:25:69:71:71:ba:f8:74:e0:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 84:65:40:d7:37:2e:ce:ed:1c:86:a5:14:17:d8:66:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 24:27:5f:ea:86:a5:eb:1e:07:5a:48:cc:70:95:fb:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 8d:4b:97:71:e7:f5:b0:10:80:a5:f5:80:c7:04:3f:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 6d:87:ed:e1:34:1f:cc:2e:9c:3f:ee:15:3b:86:99:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 10:c2:35:aa:4d:bd:4a:bf:9a:d6:d0:83:a1:40:b8:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 85:0a:62:03:73:d5:e9:44:20:34:25:29:7e:94:3f:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 59:87\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 \'a0 Exponent: 65537 (0x10001)\
+\'a0 \'a0 \'a0 \'a0 Attributes:\
+\'a0 \'a0 \'a0 \'a0 \'a0 \'a0 a0:00\
+\'a0 \'a0 Signature Algorithm: sha1WithRSAEncryption\
+\'a0 \'a0 \'a0 \'a0 cf:d1:2d:2a:89:ee:b6:9c:51:44:35:f9:9f:b9:03:2a:6e:af:\
+\'a0 \'a0 \'a0 \'a0 a5:1f:a9:e2:c9:b6:83:e2:4e:66:bd:45:60:da:5d:bc:e0:c9:\
+\'a0 \'a0 \'a0 \'a0 71:74:a5:d5:ca:f2:2b:29:10:3a:02:bb:ad:3d:ea:81:b4:25:\
+\'a0 \'a0 \'a0 \'a0 19:d6:93:ba:64:5e:f7:a0:e1:0a:d6:ca:41:93:d9:e7:9f:5f:\
+\'a0 \'a0 \'a0 \'a0 28:a5:7d:5a:4a:c2:fc:0c:6b:08:e3:60:78:89:49:11:61:db:\
+\'a0 \'a0 \'a0 \'a0 28:ae:a5:0d:62:24:cb:b5:4a:60:f4:da:e0:98:74:76:29:a3:\
+\'a0 \'a0 \'a0 \'a0 7a:56:e9:09:87:53:de:f8:6c:77:80:69:e6:ea:df:a5:ee:98:\
+\'a0 \'a0 \'a0 \'a0 9e:74:39:a5:27:59:88:11:2d:5e:59:8d:e6:37:d6:88:19:1f:\
+\'a0 \'a0 \'a0 \'a0 0c:5a:bd:51:57:09:6a:b9:6b:6a:ab:bd:3f:18:4c:9a:25:ab:\
+\'a0 \'a0 \'a0 \'a0 92:d3:79:d2:01:18:e6:1f:12:59:43:cf:18:de:d2:51:b0:43:\
+\'a0 \'a0 \'a0 \'a0 15:1d:ce:b5:e2:b4:c5:0f:e3:67:38:0e:a7:14:c8:fe:0f:cf:\
+\'a0 \'a0 \'a0 \'a0 f9:32:09:fe:40:3f:90:ff:83:2c:29:b5:05:c6:55:96:56:6c:\
+\'a0 \'a0 \'a0 \'a0 83:cd:45:c2:0f:c5:93:1a:66:6c:6e:5a:ce:b7:a5:84:e1:d8:\
+\'a0 \'a0 \'a0 \'a0 02:19:aa:fb:9a:22:5a:83:5a:f2:6e:6f:74:c3:80:45:f7:18:\
+\'a0 \'a0 \'a0 \'a0 38:68:75:3d\
+\
+\
+--
+\f0\fs24 \
+\
+\
+* Bloquear TimeStamp\
+\
+\pard\pardeftab720
+
+\f1 \cf0 echo 0 > /proc/sys/net/ipv4/tcp_timestamps\
+\pard\pardeftab720
+
+\f0 \cf0 \
+*Adicionar ao /etc/sysctl.conf\
+\pard\pardeftab720
+
+\f1 \cf0 net.ipv4.tcp_timestamps = 0\
+\
+\
+\
+\pard\pardeftab720\sl300
+\cf4 \cb5 <IfModule mod_rewrite.c>\
+RewriteEngine On\
+RewriteBase /\
+RewriteCond %\{HTTP_HOST\} !^www\\.carrouniversitario\\.com\\.br [NC]\
+RewriteRule ^(.*)$ http://www.carrouniversitario.com.br/$1 [L,R=301]\
+</IfModule>\
+\
+\
+\
+#Configura NFS\
+\
+\pard\pardeftab720\sl420
+
+\f5\fs28 \cf6 \cb1 /etc/sysconfig/nfs\
+\
+\pard\pardeftab720\sl420
+\cf0 \cb7 LOCKD_TCPPORT=32803 \
+LOCKD_UDPPORT=32769 \
+MOUNTD_PORT=892 \
+STATD_PORT=662\
+\
+#IPTABLES\
+
+\fs20 *filter\
+:INPUT DROP [0:0]\
+:FORWARD DROP [0:0]\
+:OUTPUT ACCEPT [0:0]\
+:RH-Firewall-1-INPUT - [0:0]\
+-A INPUT -j RH-Firewall-1-INPUT\
+-A FORWARD -j RH-Firewall-1-INPUT\
+-A RH-Firewall-1-INPUT -i lo -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type echo-reply -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type time-exceeded -j ACCEPT\
+-A RH-Firewall-1-INPUT -p icmp --icmp-type echo-request -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT\
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT\
+-A RH-Firewall-1-INPUT -p udp -m state --state NEW -m udp --dport 111 -j ACCEPT\
+-A RH-Firewall-1-INPUT -p tcp -m state --state NEW -m tcp --dport 111 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p udp -m state --state NEW -m udp --dport 662 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p tcp -m state --state NEW -m tcp --dport 662 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p udp -m state --state NEW -m udp --dport 875 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p tcp -m state --state NEW -m tcp --dport 875 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p udp -m state --state NEW -m udp --dport 892 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p tcp -m state --state NEW -m tcp --dport 892 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p udp -m state --state NEW -m udp --dport 2049 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p tcp -m state --state NEW -m tcp --dport 2049 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p udp -m state --state NEW -m udp --dport 32769 -j ACCEPT \
+-A RH-Firewall-1-INPUT -p tcp -m state --state NEW -m tcp --dport 32803 -j ACCEPT\
+-A RH-Firewall-1-INPUT -j REJECT --reject-with icmp-host-prohibited\
+COMMIT\
+\
+\
+Dimensionando mem\'f3ria do APACHE\
+\
+Verificar mem\'f3ria dispon\'edvel\
+free -m\
+\
+Mem\'f3ria utilizada pelo MySQL\
+\pard\pardeftab720
+
+\fs24 \cf0 \cb1 ps aux | grep 'mysql' | awk '\{print $6\}'\
+\
+Mem\'f3ria utilizada pelos processos do apache\
+\cb8 ps aux | grep 'httpd' | awk '\{print $6\}'\
+\
+\cb1 MaxClients = (1002 - 21) / 30 therefore MaxClients = 32.7\
+\
+NGINX INSTALL\
+\
+ yum install spawn-fcgi\
+ yum install php-pear-Net-Socket php-pear php-common php-gd php-devel php php-mbstring php-pear-Mail php-cli php-imap php-snmp php-pdo php-xml php-pear-Auth-SASL php-ldap php-pear-Net-SMTP php-mysql\
+yum install nginx\
+service nginx start\
+wget http://integration4us.com/SE4_NGINX_INSTALLATION_FILES/php-fastcgi\
+mv php-fastcgi /etc/init.d/php-fastcgi\
+chmod +x /etc/init.d/php-fastcgi\
+/etc/init.d/php-fastcgi start\
+netstat -tulpn | grep :9000\
+wget http://integration4us.com/SE4_NGINX_INSTALLATION_FILES/default.conf\
+#Arquivo de configuracao do NGinx\
+vim default.conf \
+mv default.conf /tmp/nginx_default.conf\
+service nginx restart\
+#Verificar erros em arquivo de log \
+tail -f /var/log/nginx/error.log \
+\
+---------------------------------php-fastcgi\
+#!/bin/sh\
+#\
+# php-cgi - php-fastcgi swaping via  spawn-fcgi\
+#\
+# chkconfig:   - 85 15\
+# description:  Run php-cgi as app server\
+# processname: php-cgi\
+# config:      /etc/sysconfig/phpfastcgi (defaults RH style)\
+# pidfile:     /var/run/php_cgi.pid\
+# Note: See how to use this script :\
+# http://www.cyberciti.biz/faq/rhel-fedora-install-configure-nginx-php5/\
+# Source function library.\
+. /etc/rc.d/init.d/functions\
+ \
+# Source networking configuration.\
+. /etc/sysconfig/network\
+ \
+# Check that networking is up.\
+[ "$NETWORKING" = "no" ] && exit 0\
+ \
+spawnfcgi="/usr/bin/spawn-fcgi"\
+php_cgi="/usr/bin/php-cgi"\
+prog=$(basename $php_cgi)\
+server_ip=127.0.0.1\
+server_port=9000\
+server_user=nginx\
+server_group=nginx\
+server_childs=3\
+pidfile="/var/run/php_cgi.pid"\
+ \
+# do not edit, put changes in /etc/sysconfig/phpfastcgi\
+[ -f /etc/sysconfig/phpfastcgi ] && . /etc/sysconfig/phpfastcgi\
+ \
+start() \{\
+    [ -x $php_cgi ] || exit 1\
+    [ -x $spawnfcgi ] || exit 2\
+    echo -n $"Starting $prog: "\
+    daemon $spawnfcgi -a $\{server_ip\} -p $\{server_port\} -u $\{server_user\} -g $\{server_group\} -P $\{pidfile\} -C $\{server_childs\} -f $\{php_cgi\}\
+    retval=$?\
+    echo\
+    return $retval\
+\}\
+ \
+stop() \{\
+    echo -n $"Stopping $prog: "\
+    killproc -p $\{pidfile\} $prog -QUIT\
+    retval=$?\
+    echo\
+    [ -f $\{pidfile\} ] && /bin/rm -f $\{pidfile\}\
+    return $retval\
+\}\
+ \
+restart()\{\
+	stop\
+	sleep 2\
+	start\
+\}\
+ \
+rh_status()\{\
+	status -p $\{pidfile\} $prog\
+\}\
+ \
+case "$1" in\
+    start)\
+        start;;\
+    stop)\
+        stop;;\
+    restart)\
+        restart;;\
+    status)\
+        rh_status;;\
+    *)\
+        echo $"Usage: $0 \{start|stop|restart|status\}"\
+        exit 3\
+esac\
+\
+----------------------------------fim do php-fastcgi\
+\
+\
+------------------------------------------default.conf do NGinX\
+\
+server \{\
+    listen       80;\
+    server_name  carrouniversitario.staging.beblook.net;\
+\
+    #charset koi8-r;\
+    #access_log  /var/log/nginx/log/host.access.log  main;\
+\
+    root   /usr/share/nginx/html;\
+    index  index.php index.html index.htm;\
+\
+\
+    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt|htm)$ \{\
+    access_log off;\
+    expires 30d;\
+    \}\
+\
+\
+    # Get rid of index.php\
+     location /index.php \{\
+     rewrite ^/(.*)$ /index.php?rewrite=2 last;\
+    \}\
+\
+    # Rewrite all directory-looking urls\
+    location ~ /$ \{\
+     rewrite ^/(.*)$ /index.php?rewrite=1 last;\
+    \}\
+\
+    # Try to route missing files\
+    # If the file doesn't exist, rewrite to index\
+    try_files $uri $uri/ @exist;\
+    location @exist \{\
+    rewrite ^(.*)$ /index.php?rewrite=1 last;\
+    \}\
+\
+    #location / \{\
+    #    root   /usr/share/nginx/html;\
+    #    index  index.php index.html index.htm;\
+    #\}\
+\
+    #error_page  404              /404.html;\
+\
+    # redirect server error pages to the static page /50x.html\
+    #\
+    error_page   500 502 503 504  /50x.html;\
+    location = /50x.html \{\
+        root   /usr/share/nginx/html;\
+    \}\
+\
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80\
+    #\
+    #location ~ \\.php$ \{\
+    #    proxy_pass   http://127.0.0.1;\
+    #\}\
+\
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000\
+    #\
+    location ~ \\.php$ \{\
+        fastcgi_pass   127.0.0.1:9000;\
+        fastcgi_index  index.php;\
+        fastcgi_param  SCRIPT_FILENAME  /usr/share/nginx/html$fastcgi_script_name;\
+        include        fastcgi_params;\
+    \}\
+\
+    # deny access to .htaccess files, if Apache's document root\
+    # concurs with nginx's one\
+    #\
+    #location ~ /\\.ht \{\
+    #    deny  all;\
+    #\}\
+\
+    location /install/ \{\
+    root /usr/share/nginx/html/install;\
+    index index.php;\
+    if (!-e $request_filename) \{ rewrite ^(.*)$ /install/index.php?rewrite=1; \}\
+    \}\
+\
+\}\
+\
+---------------Fim do default.conf do NGinX\
+\
+Using Elastic Load Balancer, to take the IP into access.log file\
+Alter in httpd.conf\
+\pard\pardeftab720\sl360
+
+\f1\fs26 \cf6 LogFormat "\\"%\{X-Forwarded-For\}i\\" %l %u %t \\"%r\\" %>s %b \\"%\{Referer\}i\\" \\"%\{User-agent\}i\\"" combined-elb\
+CustomLog log/acces_log combined-elb\
+-----}

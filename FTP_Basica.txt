@@ -1,0 +1,18 @@
+#Isto vai funcionar, como o mais basico possivel
+
+apt-get install vsftp
+
+#abaixo arquivo de configuracao
+#/etc/vsftp.conf
+
+listen=YES
+local_enable=YES
+write_enable=YES
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+chroot_local_user=YES
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem

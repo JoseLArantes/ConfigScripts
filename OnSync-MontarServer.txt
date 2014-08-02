@@ -1,0 +1,121 @@
+OnSync - Communication Server
+
+CentOS - 5.3
+
+
+yum update
+*inserir cd do xe-tools.iso
+mount /dev/xvdd /mnt
+/mnt/Linux/./install.sh
+
+
+* 62-bit OS: 4 GB of RAM (8GB or more recommended)
+* Linux® CENTOS® 5.3 64-bit/32-bit (FMIS 4.0.1 required)
+* 100MB of available disk space for installation, 80GB+ recommended for Content Storage
+* Flash Media Interactive Server 3.5.3 or higher
+* 1 GB Ethernet card
+
+cd /tmp
+wget http://download.macromedia.com/pub/flashmediaserver/updates/4_0_3/Linux_64bit/FlashMediaServer4_x64.tar.gz
+tar -zxvf FlashMediaServer4_x64.tar.gz
+/opt/FMS_4_0_3_r4011/./installFMS
+chkconfig fms on
+
+
+OnSync - WebServer
+
+yum update
+
+*inserir cd do xe-tools.iso
+
+mount /dev/xvdd /mnt
+/mnt/Linux/./install.sh
+yum install -y vim-enhanced.x86_64
+
+*Precisa do PHP 5.2 que não é padrao do centos 5.4
+
+touch /etc/yum.repos.d/CentOS-Testing.repo
+
+*colar o repo no arquivo 
+
+[c5-testing]
+name=CentOS-5 Testing
+baseurl=http://dev.centos.org/centos/$releasever/testing/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://dev.centos.org/centos/RPM-GPG-KEY-CentOS-testing
+includepkgs=php*
+
+*Instalar o webserver, banco de dados e app server php
+
+yum install -y php php-common php-mysql php-mcrypt php-pdo php-mbstring php-gd php-xml php-cli
+
+*Install Zend Optimizer
+
+cd /tmp
+wget http://downloads.zend.com/optimizer/3.3.9/ZendOptimizer-3.3.9-linux-glibc23-x86_64.tar.gz
+tar fvx ZendOptimizer-3.3.9-linux-glibc23-x86_64.tar.gz
+mv ZendOptimizer-3.3.9-linux-glibc23-x86_64 /etc/zend
+
+*Edit php.ini and insert
+zend_extension=/etc/zend/data/5_2_x_comp/ZendOptimizer.so
+
+*See if installation works
+php -v
+
+service mysqld start
+
+mysqladmin -u root --password newpassword
+
+*Ou mudar a senha direto no sistema
+mysql
+*entrou no MySql
+grant all privileges on *.* to root@'localhost' identified by 'pass';
+
+*Criar o usuario onsync do mysql com todos os acessos
+grant all privileges on *.* to onsync@'localhost' identified by 'pass';
+
+flush privileges;
+
+quit;
+
+useradd onsync
+passwd onsync
+*(ALTERA PASS)
+
+mkdir /opt/onsync
+
+*alterar o root directory do /etc/httpd/conf/httpd.conf para /opt/onsync
+
+chown onsync.onsync /opt/onsync
+
+-------------------------------------------------------------------
+Communication Server
+
+IP: 200.225.200.58
+SSH Access Port: 22
+User: onsync (user in shudders list - you can "sudo su" to be root)
+Pwd: corporatv**deliveringimages
+
+Web Server
+
+IP: 200.225.200.59
+SSH Access Port: 22
+User: onsync (user in shudders list - you can "sudo su" to be root)
+Pwd: corporatv**deliveringimages
+
+MySQL
+User: onsync
+Pwd: corporatv**deliveringimages
+
+
+File Conversion Server
+
+IP: 200.225.200.58
+RDP Access Port: 3389
+User: onsync (user in Administrators group)
+Pwd: corporatv**deliveringimages
+
+
+
+
