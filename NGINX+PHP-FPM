@@ -1,0 +1,411 @@
+NGINX + PHP-FPM
+
+(Ready for Wordpress)
+
+#########################     /etc/php-fpm.conf
+
+include=/etc/php-fpm.d/*.conf
+
+[global]
+pid = /var/run/php-fpm/php-fpm.pid
+
+error_log = /var/log/php-fpm/error.log
+
+#########################     /etc/php-fpm.d/www.conf
+
+[www]
+
+listen = 127.0.0.1:9000
+listen.allowed_clients = 127.0.0.1
+
+user = nginx
+group = nginx
+pm = dynamic
+pm.max_children = 8
+pm.start_servers = 6
+pm.min_spare_servers = 4
+pm.max_spare_servers = 8
+pm.max_requests = 150
+slowlog = /var/log/php-fpm/www-slow.log
+
+php_admin_value[error_log] = /var/log/php-fpm/www-error.log
+php_admin_flag[log_errors] = on
+
+#########################     /etc/nginx/nginx.conf
+
+user nginx;
+worker_processes 2;
+
+error_log /var/log/nginx/error.log;
+pid /var/run/nginx.pid;
+
+worker_rlimit_nofile 8192;
+
+events {
+worker_connections 1024;
+use epoll;
+# multi_accept on;
+}
+
+
+http {
+include /etc/nginx/mime.types;
+default_type application/octet-stream;
+
+log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+'$status $body_bytes_sent "$http_referer" '
+'"$http_user_agent" "$http_x_forwarded_for"';
+
+access_log /var/log/nginx/access.log main;
+
+sendfile on;
+tcp_nopush on;
+tcp_nodelay on;
+
+## General Options
+charset utf-8;
+ignore_invalid_headers on;
+limit_conn_zone $binary_remote_addr zone=gulag:2m;
+recursive_error_pages on;
+
+
+## Define a zone for limiting the number of simultaneous
+## connections nginx accepts. 1m means 3200 simultaneous
+## sessions. We need to define for each server the limit_conn
+## value refering to this or other zones.
+limit_conn_zone $binary_remote_addr zone=arbeit:2m;
+
+
+## Timeouts.
+client_body_timeout 300;
+client_header_timeout 300;
+keepalive_timeout 75 60;
+send_timeout 300;
+
+## Reset lingering timed out connections. Deflect DDoS.
+reset_timedout_connection on;
+
+## Body size.
+client_body_buffer_size 1k;
+client_body_temp_path /var/cache/nginx/client_body_temp 1 2;
+client_header_buffer_size 1k;
+large_client_header_buffers 3 3k;
+connection_pool_size 256;
+request_pool_size 4k;
+server_names_hash_bucket_size 128;
+client_max_body_size 64m;
+types_hash_max_size 2048;
+
+fastcgi_buffers 8 64k;
+fastcgi_buffer_size 256k;
+fastcgi_connect_timeout 60;
+fastcgi_send_timeout 180;
+fastcgi_read_timeout 300;
+fastcgi_busy_buffers_size 384k;
+fastcgi_temp_file_write_size 256k;
+fastcgi_intercept_errors on;
+
+
+gzip on;
+gzip_buffers 16 8k;
+gzip_comp_level 1;
+gzip_http_version 1.1;
+gzip_min_length 10;
+gzip_types text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript image/x-icon application/vnd.ms-fontobject font/opentype application/x-font-ttf image/svg+xml;
+gzip_vary on;
+gzip_proxied any; # Compression for all requests.
+## No need for regexps. See
+## http://wiki.nginx.org/NginxHttpGzipModule#gzip_disable
+gzip_disable "msie6";
+
+## Serve already compressed files directly, bypassing on-the-fly
+## compression.
+gzip_static on;
+
+## Hide the Nginx version number.
+server_tokens off;
+
+## For the filefield_nginx_progress module to work. From the
+## README. Reserve 1MB under the name 'uploads' to track uploads.
+# upload_progress uploads 1m;
+
+## Enable clickjacking protection in modern browsers. Available in
+## IE8 also. See
+## https://developer.mozilla.org/en/The_X-FRAME-OPTIONS_response_header
+## add_header X-Frame-Options SAMEORIGIN;
+
+include /etc/nginx/conf.d/*.conf;
+
+}
+
+
+
+#########################     /etc/nginx/conf.d/virtual.conf
+
+# Upstream to abstract backend connection(s) for php
+upstream php {
+#server unix:/tmp/php-cgi.socket;
+server 127.0.0.1:9000;
+}
+
+server {
+server_name _;
+
+root /opt/portal/public_html;
+
+index index.php;
+
+location = /favicon.ico {
+log_not_found off;
+access_log off;
+}
+
+location = /robots.txt {
+allow all;
+log_not_found off;
+access_log off;
+}
+
+location / {
+# This is cool because no php is touched for static content.
+# include the "?$args" part so non-default permalinks doesn't break when using query string
+try_files $uri $uri/ /index.php?$args;
+}
+
+location ~ \.php$ {
+#NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+include fastcgi.conf;
+fastcgi_intercept_errors on;
+fastcgi_pass php;
+}
+
+location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
+expires max;
+log_not_found off;
+}
+}
+
+
+#########################     /etc/php.ini
+
+[PHP]
+
+engine = On
+zend.ze1_compatibility_mode = Off
+short_open_tag = On
+asp_tags = Off
+precision = 14
+y2k_compliance = On
+
+expose_php = off
+
+;extension=memcache.so
+
+output_buffering = 4096
+apc.enabled=1
+apc.shm_segments=1
+apc.optimization=0
+apc.shm_size=128M
+apc.ttl=7200
+apc.user_ttl=7200
+apc.num_files_hint=1024
+apc.mmap_file_mask=/tmp/apc.XXXXXX
+
+zlib.output_compression = Off
+implicit_flush = Off
+unserialize_callback_func=
+serialize_precision = 100
+allow_call_time_pass_reference = Off
+safe_mode = Off
+safe_mode_gid = Off
+safe_mode_include_dir =
+safe_mode_exec_dir =
+safe_mode_allowed_env_vars = PHP_
+safe_mode_protected_env_vars = LD_LIBRARY_PATH
+disable_functions =
+disable_classes =
+
+expose_php = Off
+
+max_execution_time = 120
+max_input_time = 120
+memory_limit = 4096M
+
+error_reporting = E_ALL
+display_errors = Off
+display_startup_errors = Off
+log_errors = On
+log_errors_max_len = 1024
+ignore_repeated_errors = Off
+ignore_repeated_source = Off
+report_memleaks = On
+track_errors = Off
+
+register_globals = Off
+register_long_arrays = Off
+register_argc_argv = Off
+auto_globals_jit = On
+post_max_size = 8M
+magic_quotes_gpc = Off
+magic_quotes_runtime = Off
+magic_quotes_sybase = Off
+auto_prepend_file =
+auto_append_file =
+default_mimetype = "text/html"
+
+doc_root =
+user_dir =
+extension_dir = "/usr/lib64/php/modules"
+enable_dl = On
+
+file_uploads = On
+allow_url_fopen = On
+allow_url_include = Off
+default_socket_timeout = 60
+
+[Date]
+[filter]
+[iconv]
+[sqlite]
+[xmlrpc]
+[Pcre]
+[Syslog]
+define_syslog_variables = Off
+
+[mail function]
+SMTP = localhost
+smtp_port = 25
+sendmail_path = /usr/sbin/sendmail -t -i
+
+[SQL]
+sql.safe_mode = Off
+
+[ODBC]
+odbc.allow_persistent = On
+odbc.check_persistent = On
+odbc.max_persistent = -1
+odbc.max_links = -1
+odbc.defaultlrl = 4096
+odbc.defaultbinmode = 1
+
+[MySQL]
+mysql.allow_persistent = On
+mysql.max_persistent = -1
+mysql.max_links = -1
+mysql.default_port =
+mysql.default_socket =
+mysql.default_host =
+mysql.default_user =
+mysql.default_password =
+mysql.connect_timeout = 60
+mysql.trace_mode = Off
+
+[MySQLi]
+mysqli.max_links = -1
+mysqli.default_port = 3306
+mysqli.default_socket =
+mysqli.default_host =
+mysqli.default_user =
+mysqli.default_pw =
+mysqli.reconnect = Off
+
+[mSQL]
+msql.allow_persistent = On
+msql.max_persistent = -1
+msql.max_links = -1
+
+[PostgresSQL]
+pgsql.allow_persistent = On
+pgsql.auto_reset_persistent = Off
+pgsql.max_persistent = -1
+pgsql.max_links = -1
+pgsql.ignore_notice = 0
+pgsql.log_notice = 0
+
+[Sybase]
+sybase.allow_persistent = On
+sybase.max_persistent = -1
+sybase.max_links = -1
+sybase.min_error_severity = 10
+sybase.min_message_severity = 10
+sybase.compatability_mode = Off
+
+[Sybase-CT]
+sybct.allow_persistent = On
+sybct.max_persistent = -1
+sybct.max_links = -1
+sybct.min_server_severity = 10
+sybct.min_client_severity = 10
+
+[bcmath]
+bcmath.scale = 0
+
+[browscap]
+
+[Informix]
+ifx.default_host =
+ifx.default_user =
+ifx.default_password =
+ifx.allow_persistent = On
+ifx.max_persistent = -1
+ifx.max_links = -1
+ifx.textasvarchar = 0
+ifx.byteasvarchar = 0
+ifx.charasvarchar = 0
+ifx.blobinfile = 0
+ifx.nullformat = 0
+
+[Session]
+session.save_handler = files
+session.save_path = "/var/lib/php/session"
+session.use_cookies = 1
+session.name = PHPSESSID
+session.auto_start = 0
+session.cookie_lifetime = 0
+session.cookie_path = /
+session.cookie_domain =
+session.cookie_httponly =
+session.serialize_handler = php
+session.gc_probability = 1
+session.gc_divisor = 1000
+session.gc_maxlifetime = 1440
+session.bug_compat_42 = 0
+session.bug_compat_warn = 1
+session.referer_check =
+session.entropy_length = 0
+session.entropy_file =
+session.cache_limiter = nocache
+session.cache_expire = 180
+session.use_trans_sid = 0
+session.hash_function = 0
+session.hash_bits_per_character = 5
+url_rewriter.tags = "a=href,area=href,frame=src,input=src,form=fakeentry"
+
+[MSSQL]
+mssql.allow_persistent = On
+mssql.max_persistent = -1
+mssql.max_links = -1
+mssql.min_error_severity = 10
+mssql.min_message_severity = 10
+mssql.compatability_mode = Off
+mssql.secure_connection = Off
+
+[Assertion]
+[COM]
+[mbstring]
+[FrontBase]
+[gd]
+[exif]
+[Tidy]
+tidy.clean_output = Off
+
+[soap]
+soap.wsdl_cache_enabled=1
+soap.wsdl_cache_dir="/tmp"
+soap.wsdl_cache_ttl=86400
+
+
+
+
+
+
