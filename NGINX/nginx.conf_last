@@ -1,3 +1,106 @@
+user www-data;
+worker_processes auto;
+pid /var/run/nginx.pid;
+
+events {
+
+  worker_connections 1024;
+  multi_accept on;
+  use epoll;
+}
+
+http {
+
+  ## Silently block all undefined vhost access.
+  server {
+    server_name _;
+    return 444;
+  }
+
+  ## Basic Settings
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+  server_tokens off;
+  
+  ## Security Settings
+  
+  # For further explanation: http://tautt.com/best-nginx-configuration-for-security/
+  add_header X-Frame-Options SAMEORIGIN;
+  add_header X-Content-Type-Options nosniff;
+  add_header X-XSS-Protection "1; mode=block";
+  #add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://ssl.google-analytics.com";
+  
+  ## Add here all HTTP methods allowed
+  map $request_method $bad_method {
+    default 1;
+    ~(?i)(GET|HEAD|POST) 0;
+  }
+
+  ## Logging Settings
+
+  log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                     '$status $body_bytes_sent "$http_referer" '
+                     '"$http_user_agent" "$http_x_forwarded_for"';
+
+  access_log /var/log/nginx/access.log main buffer=32k;
+  error_log /var/log/nginx/error.log;
+
+  ## Buffer + Timeout Settings
+
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+
+  client_header_buffer_size 4k;
+  types_hash_max_size 2048;
+  client_max_body_size 25m;
+  connection_pool_size 8192;
+  request_pool_size 8k;
+  keepalive_timeout 15; #had 65
+  reset_timedout_connection on;
+  
+  # Cache file metadata
+  # http://www.nginxtips.com/nginx-open-file-cache/
+  open_file_cache max=10000 inactive=10m;
+  open_file_cache_valid 20m;
+  open_file_cache_min_uses 1;
+  open_file_cache_errors on;
+
+  server_names_hash_bucket_size 64;
+  server_names_hash_max_size 512;
+
+  ## Gzip Settings
+
+  gzip on;
+  gzip_vary on;
+  gzip_proxied any;
+  gzip_min_length 1485;
+  gzip_comp_level 2;
+  gzip_http_version 1.1;
+  gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+  
+  # make sure gzip does not lose large gzipped js or css files
+  # see http://blog.leetsoft.com/2007/07/25/nginx-gzip-ssl.html
+  gzip_buffers 16 8k;
+  
+  # Disable gzip for certain browsers.
+  gzip_disable “MSIE [1-6].(?!.*SV1)”;
+  
+  ## Virtual Host Configs
+
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+  
+  # See: https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy
+  # This MUST come AFTER the lines that includes .../sites-enabled/*, otherwise SSLv3 support may be re-enabled accidentally.
+  include snippets/perfect-forward-secrecy.conf;
+}
+
+
+########
+VIRTUAL.CONF
+
 # Move the www people to no-www
 server {
   listen 80;
