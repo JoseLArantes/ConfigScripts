@@ -1,5 +1,5 @@
 #!/bin/bash
-old=41
+old=30
 count=$(find /etc/nginx/sites-enabled -maxdepth 1 -type l|wc -l)
 
 if
