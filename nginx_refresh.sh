@@ -1,3 +1,3 @@
 #!/bin/bash
-sudo service php-fpm restart
+sudo service php5.6-fpm restart
 sudo service nginx restart
