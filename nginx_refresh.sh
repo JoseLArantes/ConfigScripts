@@ -6,7 +6,7 @@ if
         [ $count \> $old ];
 then
 	/etc/init.d/nginx configtest && sudo /etc/init.d/nginx reload;
-        sed -i -e "s/$old/$count/g" /etc/nginx/sites-available/zcheck_nginx_changes_on_infrastructure.sh;
+        sed -i -e "s/$old/$count/g" /run/nginx_refresh.sh;
 	touch /var/log/nginx/zcheck.log;
 	echo "Change noticed. Nginx reboot at $(date "+%F %T %Z")" >> /var/log/nginx/zcheck.log;
 else
