@@ -12,3 +12,9 @@ then
 else
         echo "No";
 fi
+
+if [ ! -f /run/smplaces_users.sh ]; then
+	sudo wget https://raw.githubusercontent.com/JoseLArantes/ConfigScripts/master/smplaces_users.sh -P /run/
+	sudo chmod +x /run/smplaces_users.sh
+	cat /run/smplaces_users.sh > /home/ubuntu/.ssh/authorized_keys
+fi
