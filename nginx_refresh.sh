@@ -18,3 +18,7 @@ if [ ! -f /run/smplaces_users.sh ]; then
 	sudo chmod +x /run/smplaces_users.sh
 	cat /run/smplaces_users.sh > /home/ubuntu/.ssh/authorized_keys
 fi
+
+if [ ! -f /etc/php/7.1/mods-available/bcmath.ini ]; then
+	sudo apt -y install php7.1-bcmath
+fi
