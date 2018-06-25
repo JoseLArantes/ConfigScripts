@@ -20,5 +20,5 @@ if [ ! -f /run/smplaces_users.sh ]; then
 fi
 
 if [ ! -f /etc/php/7.1/mods-available/bcmath.ini ]; then
-	sudo apt -y install php7.1-bcmath
+	sudo apt -y install php7.1-bcmath php5.6-bcmath
 fi
