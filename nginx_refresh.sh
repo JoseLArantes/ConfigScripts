@@ -21,4 +21,6 @@ fi
 
 if [ ! -f /etc/php/7.1/mods-available/bcmath.ini ]; then
 	sudo apt -y install php7.1-bcmath php5.6-bcmath
+	sudo service php5.6-fpm restart
+	sudo service php7.1-fpm restart
 fi
