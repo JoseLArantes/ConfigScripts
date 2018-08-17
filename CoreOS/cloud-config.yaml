@@ -1,29 +1,6 @@
 #cloud-config
-
-ssh_authorized_keys:
-  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtJlD26BHN7JbemjhfEL5BDSVTPkMBixqDxgsEli/hVpTPjhkZe+zxC4JRaPsVnKh857QIFjEAT/FZFeWZkj3mY/+mbhEVrSMSqefu73XN+Mk/DG08PNragp5dRnei+OYuCRTqkJCTa87bYl3WYSOfX2OzHByy2LZTUTCrzAbaZ5y7O/zYezBCIAv1OTy7ejdV8zvkBWblrootBous9/rZ+vRqkmDtLjxHphdiXm4xIchiHs4UvOhFDTd+XrmU3lYAR5L2BTyX8f5H63tESNX1GSRXmRd+pksoPQykEkOiAJ9tgKlmo6oEJxjvkD/Y6IotY31zkXOIApjnVL7zlOlr joseluiz@Ze-MacBook.local"
-coreos:
-  etcd2:
-    # generate a new token for each unique cluster from https://discovery.etcd.io/new?size=3
-    # specify the initial size of your cluster with ?size=X
-    discovery: "https://discovery.etcd.io/<token>"
-    advertise-client-urls: "http://$private_ipv4:2379,http://$private_ipv4:4001"
-    initial-advertise-peer-urls: "http://$private_ipv4:2380"
-    # listen on both the official ports and the legacy ports
-    # legacy ports can be omitted if your application doesn't depend on them
-    listen-client-urls: "http://0.0.0.0:2379,http://0.0.0.0:4001"
-    listen-peer-urls: "http://$private_ipv4:2380"
-write_files:
-  - path: "/etc/ssh/sshd_config"
-  permissions: "0600"
-  owner: "root:root"
-  content: |
-    # Use most defaults for sshd configuration ze.
-    UsePrivilegeSeparation sandbox
-    Subsystem sftp internal-sftp
-    ClientAliveInterval 180
-    UseDNS no
-    UsePAM yes
-    PrintLastLog no # handled by PAM
-    PrintMotd no # handled by PAM
-    KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,diffie-hellman-group1-sha1
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtJlD26BHN7JbemjhfEL5BDSVTPkMBixqDxgsEli/hVpTPjhkZe+zxC4JRaPsVnKh857QIFjEAT/FZFeWZkj3mY/+mbhEVrSMSqefu73XN+Mk/DG08PNragp5dRnei+OYuCRTqkJCTa87bYl3WYSOfX2OzHByy2LZTUTCrzAbaZ5y7O/zYezBCIAv1OTy7ejdV8zvkBWblrootBous9/rZ+vRqkmDtLjxHphdiXm4xIchiHs4UvOhFDTd+XrmU3lYAR5L2BTyX8f5H63tESNX1GSRXmRd+pksoPQykEkOiAJ9tgKlmo6oEJxjvkD/Y6IotY31zkXOIApjnVL7zlOlr joseluiz
