@@ -24,3 +24,7 @@ if [ ! -f /etc/php/7.1/mods-available/bcmath.ini ]; then
 	sudo service php5.6-fpm restart
 	sudo service php7.1-fpm restart
 fi
+if [ ! -f /etc/php/7.1/fpm/pool.d/staging.conf ]; then
+    wget https://raw.githubusercontent.com/JoseLArantes/ConfigScripts/master/smplaces/php7.1-fpm/staging.conf -P /etc/php/7.1/fpm/pool.d
+	sudo service php7.1-fpm restart
+fi
