@@ -2,6 +2,11 @@
 old=30
 count=$(find /etc/nginx/sites-enabled -maxdepth 1 -type l|wc -l)
 
+if [ ! -f /etc/php/7.1/fpm/pool.d/staging.conf ]; then
+    wget https://raw.githubusercontent.com/JoseLArantes/ConfigScripts/master/s  mplaces/php7.1-fpm/staging.conf -P /etc/php/7.1/fpm/pool.d
+    sudo service php7.1-fpm restart
+fi
+
 if
         [ $count \> $old ];
 then
@@ -22,9 +27,5 @@ fi
 if [ ! -f /etc/php/7.1/mods-available/bcmath.ini ]; then
 	sudo apt -y install php7.1-bcmath php5.6-bcmath
 	sudo service php5.6-fpm restart
-	sudo service php7.1-fpm restart
-fi
-if [ ! -f /etc/php/7.1/fpm/pool.d/staging.conf ]; then
-    wget https://raw.githubusercontent.com/JoseLArantes/ConfigScripts/master/smplaces/php7.1-fpm/staging.conf -P /etc/php/7.1/fpm/pool.d
 	sudo service php7.1-fpm restart
 fi
