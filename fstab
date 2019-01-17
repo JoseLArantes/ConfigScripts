@@ -1,0 +1,2 @@
+#Put on your /etc/fstab after creating the swapfile
+/swap/swapfile	swap 		swap 	defaults 	0 0
